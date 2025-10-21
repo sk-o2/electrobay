@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "name": "mern-app",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run circuithub\"",
+    "server": "npm run dev --prefix server",
+    "circuithub": "npm run dev --prefix circuithub"
+  }
+}
+

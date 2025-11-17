@@ -1322,7 +1322,7 @@ export default function ProductDetails() {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center cursor-pointer" onClick={() => navigate("/")}>
                 <ShoppingCart className="w-6 h-6 text-white" />
               </div>
-              <span className="text-slate-900 font-bold cursor-pointer" onClick={() => navigate("/")}>ElectroHub</span>
+              <span className="text-slate-900 font-bold cursor-pointer" onClick={() => navigate("/")}>ElectroBay</span>
             </div>
 
             {/* Desktop Navigation */}

@@ -782,7 +782,7 @@ const ProductPage = () => {
                 className="text-slate-900 font-bold cursor-pointer"
                 onClick={() => navigate("/")}
               >
-                ElectroHub
+                ElectroBay
               </span>
             </div>
 
@@ -898,7 +898,7 @@ const ProductPage = () => {
                       <span>Login</span>
                     </button>
                     <button 
-                      onClick={() => navigate("/register")} 
+                      onClick={() => navigate("/auth")} 
                       className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition"
                     >
                       <UserPlus className="w-4 h-4" />
@@ -1087,7 +1087,7 @@ const ProductPage = () => {
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                   <ShoppingCart className="w-6 h-6 text-white" />
                 </div>
-                <span className="font-bold text-xl">ElectroHub</span>
+                <span className="font-bold text-xl">ElectroBay</span>
               </div>
               <p className="text-white/70">
                 Your trusted partner for all electronics and development needs.
@@ -1138,7 +1138,7 @@ const ProductPage = () => {
           </div>
 
           <div className="border-t border-white/10 pt-8 text-center text-white/70">
-            <p>&copy; {new Date().getFullYear()} ElectroHub. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} ElectroBay. All rights reserved.</p>
           </div>
         </div>
       </footer>

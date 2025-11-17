@@ -87,6 +87,7 @@ import orderRoutes from './routes/orderRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import protectedRoutes from './routes/protected.js'
 
+
 dotenv.config();
 
 const app = express();
@@ -111,6 +112,8 @@ app.use('/api/cart', cartRoutes);        // Protected cart routes
 app.use('/api/orders', orderRoutes);     // Protected order routes
 app.use('/api/user', userRoutes);        // Protected user routes
 app.use('/api', protectedRoutes);       // Additional protected routes
+app.use("/api", authRoutes);
+app.use('/api/profile', protectedRoutes); // User profile routes
 
 // Test route
 app.get('/', (req, res) => {

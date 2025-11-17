@@ -18,7 +18,7 @@ const UserSchema = new Schema({
   phone: { type: String },
   address: { type: AddressSchema, default: null },
   is_active: { type: Boolean, default: false },
-  role: { type: String, default: 'customer', enum: ['customer', 'admin'] },
+  role: { type: String, default: 'customer', },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now }
 });
@@ -32,3 +32,21 @@ UserSchema.pre('save', function preSave(next) {
 
 
 export default mongoose.model('User', UserSchema);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

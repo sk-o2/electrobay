@@ -1,52 +1,44 @@
-// models/User.js
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-const { Schema } = mongoose;
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, unique: true, index: true },
+    password: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: {
+  line1: { type: String }, 
+  city: { type: String },
+  state: { type: String },
+  postalCode: { type: String },
+  country: { type: String },
+},
 
-const AddressSchema = new Schema({
-  line1: String,
-  line2: String,
-  city: String,
-  state: String,
-  postalCode: String,
-  country: String
-}, { _id: false });
 
-const UserSchema = new Schema({
-  email: { type: String, required: true, lowercase: true, unique: true },
-  password_hash: { type: String, required: true },
-  phone: { type: String },
-  address: { type: AddressSchema, default: null },
-  is_active: { type: Boolean, default: false },
-  role: { type: String, default: 'customer', },
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now }
-});
+    role: { type: String, enum: ["user", "admin"], default: "user" },
 
-UserSchema.pre('save', function preSave(next) {
-  this.updated_at = Date.now();
+    isEmailVerified: { type: Boolean, default: false },
+
+    refreshToken: String,
+
+    emailVerifyToken: String,
+    emailVerifyExpires: Date,
+
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+  },
+  { timestamps: true }
+);
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
-
-
-export default mongoose.model('User', UserSchema);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default mongoose.model("User", userSchema);

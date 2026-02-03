@@ -94,6 +94,8 @@ function App() {
           }
         />
 
+         
+
         {/* Add other routes (profile, etc.) */}
         <Route
           path="/profile"

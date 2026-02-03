@@ -24,11 +24,13 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.2",
+    "morgan": "^1.10.1",
     "nodemailer": "^7.0.10",
     "twilio": "^5.10.3",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "baseline-browser-mapping": "^2.9.11",
     "nodemon": "^3.1.10"
   }
 }

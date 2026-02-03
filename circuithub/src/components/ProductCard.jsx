@@ -189,18 +189,18 @@ const ProductCard = ({ product, onAdd = () => {}, onView = () => {} }) => {
         <div className="flex items-end justify-between mb-4">
           <div>
             <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              ${price}
+              ₹{price}
             </p>
             {product?.mrp && product.mrp > product.price && (
               <p className="text-xs text-slate-400 line-through">
-                ${product.mrp.toFixed(2)}
+                ₹{product.mrp.toFixed(2)}
               </p>
             )}
           </div>
           
           {product?.mrp && product.mrp > product.price && (
             <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded-md">
-              Save ${(product.mrp - product.price).toFixed(2)}
+              Save ₹{(product.mrp - product.price).toFixed(2)}
             </span>
           )}
         </div>

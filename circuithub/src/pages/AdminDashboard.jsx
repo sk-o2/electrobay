@@ -1,605 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const AdminDashboard = () => {
-//   const [products, setProducts] = useState([]);
-//   const [orders, setOrders] = useState([]);
-//   const [newProduct, setNewProduct] = useState({
-//     name: "",
-//     category: "",
-//     price: 0,
-//     stock: 0,
-//     images: [],
-//     specifications: "",
-//   });
-
-//   const fetchProducts = async () => {
-//     const res = await axios.get("http://localhost:5000/api/products");
-//     setProducts(res.data);
-//   };
-
-//   const fetchOrders = async () => {
-//     const res = await axios.get("http://localhost:5000/api/orders");
-//     setOrders(res.data);
-//   };
-
-//   useEffect(() => {
-//     fetchProducts();
-//     fetchOrders();
-//   }, []);
-
-//   const addProduct = async () => {
-//     try {
-//       await axios.post("http://localhost:5000/api/products", newProduct);
-//       fetchProducts();
-//       setNewProduct({
-//         name: "",
-//         category: "",
-//         price: 0,
-//         stock: 0,
-//         images: [],
-//         specifications: "",
-//       });
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   const deleteProduct = async (id) => {
-//     await axios.delete(`http://localhost:5000/api/products/${id}`);
-//     fetchProducts();
-//   };
-
-//   const updateProductStock = async (id, stock) => {
-//     await axios.put(`http://localhost:5000/api/products/${id}`, { stock });
-//     fetchProducts();
-//   };
-
-//   const updateOrderStatus = async (orderId, status) => {
-//     try {
-//       await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, { status });
-//       fetchOrders();
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   // Order Stats
-//   const totalOrders = orders.length;
-//   const pendingOrders = orders.filter((o) => o.status === "Pending").length;
-//   const fulfilledOrders = orders.filter((o) => o.status === "Fulfilled").length;
-
-//   return (
-//     <div className="min-h-screen bg-[#F8FAFC] p-6">
-//       {/* Navbar */}
-//       <div className="flex justify-between items-center mb-6">
-//         <h1 className="text-2xl font-bold text-[#2D7D9A]">Admin Dashboard</h1>
-//         <button className="bg-[#F9A826] px-4 py-2 rounded-lg">Logout</button>
-//       </div>
-
-//       {/* Stats */}
-//       <div className="flex flex-col md:flex-row gap-6 mb-6">
-//         <div className="bg-white p-4 rounded-lg shadow flex-1 text-center">
-//           <h2 className="font-bold text-[#1E293B]">Total Orders</h2>
-//           <p className="text-[#2D7D9A] text-xl">{totalOrders}</p>
-//         </div>
-//         <div className="bg-white p-4 rounded-lg shadow flex-1 text-center">
-//           <h2 className="font-bold text-[#1E293B]">Pending Orders</h2>
-//           <p className="text-[#F9A826] text-xl">{pendingOrders}</p>
-//         </div>
-//         <div className="bg-white p-4 rounded-lg shadow flex-1 text-center">
-//           <h2 className="font-bold text-[#1E293B]">Fulfilled Orders</h2>
-//           <p className="text-[#22C55E] text-xl">{fulfilledOrders}</p>
-//         </div>
-//       </div>
-
-//       {/* Add Product Form */}
-//       <div className="bg-white p-6 rounded-lg shadow mb-6">
-//         <h2 className="text-xl font-bold text-[#1E293B] mb-4">Add New Product</h2>
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-//           <input
-//             placeholder="Name"
-//             value={newProduct.name}
-//             onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Category"
-//             value={newProduct.category}
-//             onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Price"
-//             type="number"
-//             value={newProduct.price}
-//             onChange={(e) => setNewProduct({ ...newProduct, price: parseFloat(e.target.value) })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Stock"
-//             type="number"
-//             value={newProduct.stock}
-//             onChange={(e) => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Images (comma separated URLs)"
-//             value={newProduct.images}
-//             onChange={(e) =>
-//               setNewProduct({ ...newProduct, images: e.target.value.split(",") })
-//             }
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Specifications"
-//             value={newProduct.specifications}
-//             onChange={(e) => setNewProduct({ ...newProduct, specifications: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//         </div>
-//         <button
-//           onClick={addProduct}
-//           className="mt-4 bg-[#2D7D9A] text-white px-4 py-2 rounded-lg hover:bg-[#3BA8C8] transition"
-//         >
-//           Add Product
-//         </button>
-//       </div>
-
-//       {/* Products Table */}
-//       <div className="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-//         <h2 className="text-xl font-bold text-[#1E293B] mb-4">Products</h2>
-//         <table className="w-full text-left border-collapse min-w-[600px]">
-//           <thead>
-//             <tr>
-//               <th className="border-b p-2">Name</th>
-//               <th className="border-b p-2">Category</th>
-//               <th className="border-b p-2">Price</th>
-//               <th className="border-b p-2">Stock</th>
-//               <th className="border-b p-2">Actions</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {products.map((p) => (
-//               <tr key={p._id}>
-//                 <td className="border-b p-2">{p.name}</td>
-//                 <td className="border-b p-2">{p.category}</td>
-//                 <td className="border-b p-2">${p.price}</td>
-//                 <td className="border-b p-2">{p.stock}</td>
-//                 <td className="border-b p-2 flex gap-2">
-//                   <button
-//                     onClick={() => updateProductStock(p._id, p.stock + 1)}
-//                     className="bg-[#F9A826] px-2 py-1 rounded hover:bg-[#3BA8C8]"
-//                   >
-//                     +1
-//                   </button>
-//                   <button
-//                     onClick={() => deleteProduct(p._id)}
-//                     className="bg-[#EF4444] px-2 py-1 rounded hover:bg-[#F87171]"
-//                   >
-//                     Delete
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-
-//       {/* Orders Table */}
-//       <div className="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-//         <h2 className="text-xl font-bold text-[#1E293B] mb-4">Orders</h2>
-//         <table className="w-full text-left border-collapse min-w-[800px]">
-//           <thead>
-//             <tr>
-//               <th className="border-b p-2">Order ID</th>
-//               <th className="border-b p-2">Customer</th>
-//               <th className="border-b p-2">Products</th>
-//               <th className="border-b p-2">Total ($)</th>
-//               <th className="border-b p-2">Status</th>
-//               <th className="border-b p-2">Update</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {orders.map((order) => (
-//               <tr key={order._id}>
-//                 <td className="border-b p-2">{order._id}</td>
-//                 <td className="border-b p-2">{order.customerName || "N/A"}</td>
-//                 <td className="border-b p-2">
-//                   {order.products.map((p, idx) => (
-//                     <div key={idx}>
-//                       {p.product.name} x {p.quantity}
-//                     </div>
-//                   ))}
-//                 </td>
-//                 <td className="border-b p-2">
-//                   {order.products.reduce((sum, p) => sum + p.product.price * p.quantity, 0).toFixed(2)}
-//                 </td>
-//                 <td className={`border-b p-2 ${order.status === "Pending" ? "text-[#F9A826]" : "text-[#22C55E]"}`}>
-//                   {order.status}
-//                 </td>
-//                 <td className="border-b p-2">
-//                   {order.status === "Pending" && (
-//                     <button
-//                       onClick={() => updateOrderStatus(order._id, "Fulfilled")}
-//                       className="bg-[#2D7D9A] text-white px-2 py-1 rounded hover:bg-[#3BA8C8]"
-//                     >
-//                       Mark Fulfilled
-//                     </button>
-//                   )}
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const AdminDashboard = () => {
-//   const [products, setProducts] = useState([]);
-//   const [orders, setOrders] = useState([]);
-//   const [newProduct, setNewProduct] = useState({
-//     name: "",
-//     category: "",
-//     price: 0,
-//     stock: 0,
-//     images: [], // array
-//     specifications: [], // array
-//     description: "",
-//     sku: "",
-//     tags: [],
-//   });
-
-//   const parseProductsResponse = (res) => {
-//     // backend may return either: [] OR { data: [...], meta: {...} }
-//     if (!res) return [];
-//     if (Array.isArray(res)) return res;
-//     if (Array.isArray(res.data)) return res.data;
-//     if (Array.isArray(res.data?.data)) return res.data.data;
-//     return [];
-//   };
-
-//   const parseOrdersResponse = (res) => {
-//     // backend might return array or { data: [...] }
-//     if (!res) return [];
-//     if (Array.isArray(res)) return res;
-//     if (Array.isArray(res.data)) return res.data;
-//     if (Array.isArray(res.data?.data)) return res.data.data;
-//     return [];
-//   };
-
-//   const fetchProducts = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/api/products");
-//       const parsed = parseProductsResponse(res.data ?? res);
-//       setProducts(parsed);
-//     } catch (err) {
-//       console.error("fetchProducts error:", err);
-//       setProducts([]);
-//     }
-//   };
-
-//   const fetchOrders = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/api/orders");
-//       const parsed = parseOrdersResponse(res.data ?? res);
-//       setOrders(parsed);
-//     } catch (err) {
-//       console.error("fetchOrders error:", err);
-//       setOrders([]);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchProducts();
-//     fetchOrders();
-//   }, []);
-
-//   const addProduct = async () => {
-//     try {
-//       // normalize payload to match new product schema (arrays expected)
-//       const payload = {
-//         ...newProduct,
-//         price: Number(newProduct.price) || 0,
-//         stock: Number(newProduct.stock) || 0,
-//         images: Array.isArray(newProduct.images)
-//           ? newProduct.images
-//           : (newProduct.images || "").toString().split(",").map(s => s.trim()).filter(Boolean),
-//         specifications: Array.isArray(newProduct.specifications)
-//           ? newProduct.specifications
-//           : (newProduct.specifications || "").toString().split(",").map(s => s.trim()).filter(Boolean),
-//         tags: Array.isArray(newProduct.tags)
-//           ? newProduct.tags
-//           : (newProduct.tags || "").toString().split(",").map(s => s.trim()).filter(Boolean),
-//       };
-
-//       await axios.post("http://localhost:5000/api/products", payload);
-//       await fetchProducts();
-//       setNewProduct({
-//         name: "",
-//         category: "",
-//         price: 0,
-//         stock: 0,
-//         images: [],
-//         specifications: [],
-//         description: "",
-//         sku: "",
-//         tags: [],
-//       });
-//     } catch (err) {
-//       console.error("addProduct error:", err);
-//     }
-//   };
-
-//   const deleteProduct = async (id) => {
-//     try {
-//       await axios.delete(`http://localhost:5000/api/products/${id}`);
-//       await fetchProducts();
-//     } catch (err) {
-//       console.error("deleteProduct error:", err);
-//     }
-//   };
-
-//   const updateProductStock = async (id, stock) => {
-//     try {
-//       await axios.put(`http://localhost:5000/api/products/${id}`, { stock });
-//       await fetchProducts();
-//     } catch (err) {
-//       console.error("updateProductStock error:", err);
-//     }
-//   };
-
-//   const updateOrderStatus = async (orderId, status) => {
-//     try {
-//       // backend update expects PUT /api/orders/:id with { status }
-//       await axios.put(`http://localhost:5000/api/orders/${orderId}`, { status });
-//       await fetchOrders();
-//     } catch (err) {
-//       console.error("updateOrderStatus error:", err);
-//     }
-//   };
-
-//   // Order Stats (safe guards if orders isn't an array)
-//   const totalOrders = Array.isArray(orders) ? orders.length : 0;
-//   const pendingOrders = Array.isArray(orders) ? orders.filter((o) => o.status === "Pending").length : 0;
-//   const fulfilledOrders = Array.isArray(orders) ? orders.filter((o) => o.status === "Fulfilled").length : 0;
-
-//   return (
-//     <div className="min-h-screen bg-[#F8FAFC] p-6">
-//       {/* Navbar */}
-//       <div className="flex justify-between items-center mb-6">
-//         <h1 className="text-2xl font-bold text-[#2D7D9A]">Admin Dashboard</h1>
-//         <button className="bg-[#F9A826] px-4 py-2 rounded-lg">Logout</button>
-//       </div>
-
-//       {/* Stats */}
-//       <div className="flex flex-col md:flex-row gap-6 mb-6">
-//         <div className="bg-white p-4 rounded-lg shadow flex-1 text-center">
-//           <h2 className="font-bold text-[#1E293B]">Total Orders</h2>
-//           <p className="text-[#2D7D9A] text-xl">{totalOrders}</p>
-//         </div>
-//         <div className="bg-white p-4 rounded-lg shadow flex-1 text-center">
-//           <h2 className="font-bold text-[#1E293B]">Pending Orders</h2>
-//           <p className="text-[#F9A826] text-xl">{pendingOrders}</p>
-//         </div>
-//         <div className="bg-white p-4 rounded-lg shadow flex-1 text-center">
-//           <h2 className="font-bold text-[#1E293B]">Fulfilled Orders</h2>
-//           <p className="text-[#22C55E] text-xl">{fulfilledOrders}</p>
-//         </div>
-//       </div>
-
-//       {/* Add Product Form */}
-//       <div className="bg-white p-6 rounded-lg shadow mb-6">
-//         <h2 className="text-xl font-bold text-[#1E293B] mb-4">Add New Product</h2>
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-//           <input
-//             placeholder="Name"
-//             value={newProduct.name}
-//             onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Category"
-//             value={newProduct.category}
-//             onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Price"
-//             type="number"
-//             value={newProduct.price}
-//             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Stock"
-//             type="number"
-//             value={newProduct.stock}
-//             onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Images (comma separated URLs)"
-//             value={Array.isArray(newProduct.images) ? newProduct.images.join(",") : newProduct.images}
-//             onChange={(e) =>
-//               setNewProduct({ ...newProduct, images: e.target.value })
-//             }
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Specifications (comma separated)"
-//             value={Array.isArray(newProduct.specifications) ? newProduct.specifications.join(",") : newProduct.specifications}
-//             onChange={(e) => setNewProduct({ ...newProduct, specifications: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Tags (comma separated)"
-//             value={Array.isArray(newProduct.tags) ? newProduct.tags.join(",") : newProduct.tags}
-//             onChange={(e) => setNewProduct({ ...newProduct, tags: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="SKU"
-//             value={newProduct.sku}
-//             onChange={(e) => setNewProduct({ ...newProduct, sku: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//           <input
-//             placeholder="Short description"
-//             value={newProduct.description}
-//             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-//             className="border p-2 rounded"
-//           />
-//         </div>
-//         <button
-//           onClick={addProduct}
-//           className="mt-4 bg-[#2D7D9A] text-white px-4 py-2 rounded-lg hover:bg-[#3BA8C8] transition"
-//         >
-//           Add Product
-//         </button>
-//       </div>
-
-//       {/* Products Table */}
-//       <div className="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-//         <h2 className="text-xl font-bold text-[#1E293B] mb-4">Products</h2>
-//         <table className="w-full text-left border-collapse min-w-[600px]">
-//           <thead>
-//             <tr>
-//               <th className="border-b p-2">Name</th>
-//               <th className="border-b p-2">Category</th>
-//               <th className="border-b p-2">Price</th>
-//               <th className="border-b p-2">Stock</th>
-//               <th className="border-b p-2">Actions</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {Array.isArray(products) && products.map((p) => (
-//               <tr key={p._id}>
-//                 <td className="border-b p-2">{p.name}</td>
-//                 <td className="border-b p-2">{p.category}</td>
-//                 <td className="border-b p-2">${p.price}</td>
-//                 <td className="border-b p-2">{p.stock}</td>
-//                 <td className="border-b p-2 flex gap-2">
-//                   <button
-//                     onClick={() => updateProductStock(p._id, (p.stock || 0) + 1)}
-//                     className="bg-[#F9A826] px-2 py-1 rounded hover:bg-[#3BA8C8]"
-//                   >
-//                     +1
-//                   </button>
-//                   <button
-//                     onClick={() => deleteProduct(p._id)}
-//                     className="bg-[#EF4444] px-2 py-1 rounded hover:bg-[#F87171]"
-//                   >
-//                     Delete
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//             {(!Array.isArray(products) || products.length === 0) && (
-//               <tr><td colSpan={5} className="p-4 text-center text-sm text-gray-500">No products found</td></tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-
-//       {/* Orders Table */}
-//       <div className="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-//         <h2 className="text-xl font-bold text-[#1E293B] mb-4">Orders</h2>
-//         <table className="w-full text-left border-collapse min-w-[800px]">
-//           <thead>
-//             <tr>
-//               <th className="border-b p-2">Order ID</th>
-//               <th className="border-b p-2">Customer</th>
-//               <th className="border-b p-2">Products</th>
-//               <th className="border-b p-2">Total ($)</th>
-//               <th className="border-b p-2">Status</th>
-//               <th className="border-b p-2">Update</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {Array.isArray(orders) && orders.map((order) => (
-//               <tr key={order._id}>
-//                 <td className="border-b p-2">{order._id}</td>
-//                 <td className="border-b p-2">{order.customerName || order.userId || "N/A"}</td>
-//                 <td className="border-b p-2">
-//                   {Array.isArray(order.items) && order.items.map((p, idx) => (
-//                     <div key={idx}>
-//                       {p.productId?.name || p.productId?.title || "Unknown"} x {p.quantity}
-//                     </div>
-//                   ))}
-//                 </td>
-//                 <td className="border-b p-2">
-//                   {Array.isArray(order.items)
-//                     ? order.items.reduce((sum, p) => {
-//                         const price = p.productId?.price ?? p.productId?.cost ?? 0;
-//                         return sum + (price * (p.quantity || 0));
-//                       }, 0).toFixed(2)
-//                     : "0.00"}
-//                 </td>
-//                 <td className={`border-b p-2 ${order.status === "Pending" ? "text-[#F9A826]" : "text-[#22C55E]"}`}>
-//                   {order.status}
-//                 </td>
-//                 <td className="border-b p-2">
-//                   {order.status === "Pending" && (
-//                     <button
-//                       onClick={() => updateOrderStatus(order._id, "Fulfilled")}
-//                       className="bg-[#2D7D9A] text-white px-2 py-1 rounded hover:bg-[#3BA8C8]"
-//                     >
-//                       Mark Fulfilled
-//                     </button>
-//                   )}
-//                 </td>
-//               </tr>
-//             ))}
-//             {(!Array.isArray(orders) || orders.length === 0) && (
-//               <tr><td colSpan={6} className="p-4 text-center text-sm text-gray-500">No orders found</td></tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // src/pages/AdminDashboard.jsx
@@ -618,6 +16,9 @@ import {
   LogOut
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+
+
 
 // ============= UI COMPONENTS =============
 
@@ -801,7 +202,7 @@ function Footer() {
 
           <div>
             <h4 className="mb-4 text-white">Contact</h4>
-            <p className="text-white/70">support@ElectroBay.com</p>
+            <p className="text-white/70">electrobay.here@gmail.com</p>
           </div>
         </div>
 
@@ -839,6 +240,13 @@ function StatCard({ title, value, icon: Icon, color = "blue" }) {
 
 // ============= MAIN COMPONENT =============
 
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+axios.defaults.baseURL = API_BASE;
+axios.defaults.withCredentials = true; // critical for cookie-based auth
+axios.defaults.headers.common["Content-Type"] = "application/json";
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -855,13 +263,22 @@ const AdminDashboard = () => {
     tags: [],
   });
 
+  // const parseProductsResponse = (res) => {
+  //   if (!res) return [];
+  //   if (Array.isArray(res)) return res;
+  //   if (Array.isArray(res.data)) return res.data;
+  //   if (Array.isArray(res.data?.data)) return res.data.data;
+  //   return [];
+  // };
   const parseProductsResponse = (res) => {
-    if (!res) return [];
-    if (Array.isArray(res)) return res;
-    if (Array.isArray(res.data)) return res.data;
-    if (Array.isArray(res.data?.data)) return res.data.data;
-    return [];
-  };
+  if (!res) return [];
+  if (Array.isArray(res)) return res;
+  if (Array.isArray(res.products)) return res.products;
+  if (Array.isArray(res.data)) return res.data;
+  if (Array.isArray(res.data?.products)) return res.data.products;
+  return [];
+};
+
 
   const parseOrdersResponse = (res) => {
     if (!res) return [];
@@ -873,7 +290,8 @@ const AdminDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get("/api/products");
+      // const { data } = await axios.get("/api/products");
       const parsed = parseProductsResponse(res.data ?? res);
       setProducts(parsed);
     } catch (err) {
@@ -884,7 +302,7 @@ const AdminDashboard = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/orders");
+      const res = await axios.get("/api/orders");
       const parsed = parseOrdersResponse(res.data ?? res);
       setOrders(parsed);
     } catch (err) {
@@ -894,8 +312,18 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchOrders();
+    const checkAdmin = async () => {
+    try {
+      await axios.get("/api/admin/check");
+      fetchProducts();
+      fetchOrders();
+    } catch (err) {
+      console.error("Admin check failed", err);
+      navigate("/auth");
+    }
+  };
+
+  checkAdmin();
   }, []);
 
   const addProduct = async () => {
@@ -915,7 +343,7 @@ const AdminDashboard = () => {
           : (newProduct.tags || "").toString().split(",").map(s => s.trim()).filter(Boolean),
       };
 
-      await axios.post("http://localhost:5000/api/products", payload);
+      await axios.post("/api/products", payload);
       await fetchProducts();
       setNewProduct({
         name: "",
@@ -937,7 +365,7 @@ const AdminDashboard = () => {
   const deleteProduct = async (id) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`/api/products/${id}`);
       await fetchProducts();
     } catch (err) {
       console.error("deleteProduct error:", err);
@@ -947,7 +375,7 @@ const AdminDashboard = () => {
 
   const updateProductStock = async (id, stock) => {
     try {
-      await axios.put(`http://localhost:5000/api/products/${id}`, { stock });
+      await axios.put(`/api/products/${id}`, { stock });
       await fetchProducts();
     } catch (err) {
       console.error("updateProductStock error:", err);
@@ -957,7 +385,7 @@ const AdminDashboard = () => {
 
   const updateOrderStatus = async (orderId, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${orderId}`, { status });
+      await axios.put(`/api/orders/${orderId}`, { status });
       await fetchOrders();
     } catch (err) {
       console.error("updateOrderStatus error:", err);
@@ -965,10 +393,20 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   navigate("/");
+  // };
+  const handleLogout = async () => {
+  try {
+    await axios.post("/api/auth/logout"); // clears cookies on server
+  } catch (err) {
+    console.error("Logout error:", err);
+  } finally {
+    navigate("/"); // redirect no matter what
+  }
+};
+
 
   // Order Stats
   const totalOrders = Array.isArray(orders) ? orders.length : 0;
@@ -1077,8 +515,8 @@ const AdminDashboard = () => {
               Add Product
             </Button>
           </Card>
-
-          {/* Products Table */}
+          
+          {/* Products Table */}  
           <Card className="p-6 mb-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -1169,18 +607,18 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(orders) && orders.map((order) => (
+                  {/* {Array.isArray(orders) && orders.map((order) => (
                     <tr key={order._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
                       <td className="p-3 text-slate-700 font-mono text-xs">
                         {order._id.substring(0, 8)}...
                       </td>
                       <td className="p-3 text-slate-700">
-                        {order.customerName || order.userId || "N/A"}
+                        {order.customerName || order.userId || order.user?.name || "N/A"}
                       </td>
                       <td className="p-3 text-slate-600 text-sm">
                         {Array.isArray(order.items) && order.items.map((p, idx) => (
                           <div key={idx}>
-                            {p.productId?.name || p.productId?.title || "Unknown"} x {p.quantity}
+                            {p.product?.name || p.product?.title ||  "Unknown"} x {p.quantity}
                           </div>
                         ))}
                       </td>
@@ -1189,7 +627,7 @@ const AdminDashboard = () => {
                         {Array.isArray(order.items)
                           ? order.items.reduce((sum, p) => {
                               const price = p.productId?.price ?? p.productId?.cost ?? 0;
-                              return sum + (price * (p.quantity || 0));
+                              return sum + (price * (p.quantity || order.totalAmount || 0));
                             }, 0).toFixed(2)
                           : "0.00"}
                       </td>
@@ -1216,7 +654,53 @@ const AdminDashboard = () => {
                         )}
                       </td>
                     </tr>
-                  ))}
+                  ))} */}
+                  {Array.isArray(orders) && orders.map((order) => (
+  <tr key={order._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
+    <td className="p-3 text-slate-700 font-mono text-xs">
+      {order._id.substring(0, 8)}...
+    </td>
+
+    <td className="p-3 text-slate-700">
+      {order.user?.name || order.customerName || "N/A"}
+    </td>
+
+    <td className="p-3 text-slate-600 text-sm">
+      {order.items?.map((p, idx) => (
+        <div key={idx}>
+          {p.product?.name || "Unknown"} x {p.quantity}
+        </div>
+      ))}
+    </td>
+
+    <td className="p-3 text-slate-900">
+      ${order.totalAmount?.toFixed(2) || "0.00"}
+    </td>
+
+    <td className="p-3">
+      <span className={`px-3 py-1 rounded-full text-xs ${
+        order.status === "Pending"
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-green-100 text-green-700"
+      }`}>
+        {order.status}
+      </span>
+    </td>
+
+    <td className="p-3">
+      {order.status === "Pending" && (
+        <Button
+          onClick={() => updateOrderStatus(order._id, "Fulfilled")}
+          variant="success"
+          size="xs"
+        >
+          Mark Fulfilled
+        </Button>
+      )}
+    </td>
+  </tr>
+))}
+
                   {(!Array.isArray(orders) || orders.length === 0) && (
                     <tr>
                       <td colSpan={6} className="p-8 text-center text-slate-500">
@@ -1237,3 +721,240 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
+
+
+// // src/pages/AdminDashboard.jsx
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import {
+//   ShoppingCart,
+//   Menu,
+//   Package,
+//   TrendingUp,
+//   CheckCircle,
+//   Clock,
+//   Plus,
+//   Trash2,
+//   LogOut,
+// } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+
+// /* ================== AXIOS CONFIG ================== */
+// const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+// axios.defaults.baseURL = API_BASE;
+// axios.defaults.withCredentials = true;
+// axios.defaults.headers.common["Content-Type"] = "application/json";
+
+// /* ================== UI COMPONENTS ================== */
+
+// function Button({ children, variant = "default", size = "default", onClick }) {
+//   const variants = {
+//     default: "bg-slate-900 text-white hover:bg-slate-800",
+//     gradient: "bg-gradient-to-br from-blue-500 to-purple-600 text-white",
+//     danger: "bg-red-600 text-white hover:bg-red-700",
+//     outline: "border border-slate-300 hover:bg-slate-100",
+//   };
+
+//   const sizes = {
+//     default: "px-4 py-2",
+//     sm: "px-3 py-1 text-sm",
+//     xs: "px-2 py-1 text-xs",
+//   };
+
+//   return (
+//     <button
+//       onClick={onClick}
+//       className={`rounded ${variants[variant]} ${sizes[size]}`}
+//     >
+//       {children}
+//     </button>
+//   );
+// }
+
+// function Card({ children }) {
+//   return <div className="bg-white border rounded shadow-sm p-6">{children}</div>;
+// }
+
+// /* ================== MAIN ================== */
+
+// const AdminDashboard = () => {
+//   const navigate = useNavigate();
+
+//   const [products, setProducts] = useState([]);
+//   const [orders, setOrders] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   /* ================== AUTH CHECK ================== */
+//   const checkAdmin = async () => {
+//     try {
+//       const res = await axios.get("/api/auth/me");
+//       if (res.data.role !== "admin") {
+//         navigate("/");
+//       }
+//     } catch {
+//       navigate("/auth");
+//     }
+//   };
+
+//   /* ================== DATA ================== */
+//   // const fetchProducts = async () => {
+//   //   const res = await axios.get("/api/products");
+//   //   setProducts(res.data || []);
+//   // };
+
+//   const fetchProducts = async () => {
+//   const res = await axios.get("/api/admin/products", {
+//     withCredentials: true,
+//   });
+
+//   setProducts(res.data); // ✅ ALWAYS ARRAY
+// };
+
+//   const fetchOrders = async () => {
+//     const res = await axios.get("/api/orders");
+//     setOrders(res.data || []);
+//   };
+
+//   useEffect(() => {
+//     (async () => {
+//       await checkAdmin();
+//       await fetchProducts();
+//       await fetchOrders();
+//       setLoading(false);
+//     })();
+//   }, []);
+
+//   /* ================== ACTIONS ================== */
+//   const addProduct = async () => {
+//     await axios.post("/api/products", {
+//       name: "New Product",
+//       price: 100,
+//       stock: 10,
+//     });
+//     fetchProducts();
+//   };
+
+//   const deleteProduct = async (id) => {
+//     if (!confirm("Delete product?")) return;
+//     await axios.delete(`/api/products/${id}`);
+//     fetchProducts();
+//   };
+
+//   const updateOrderStatus = async (id) => {
+//     await axios.put(`/api/orders/${id}`, { status: "Fulfilled" });
+//     fetchOrders();
+//   };
+
+//   const logout = async () => {
+//     await axios.post("/api/auth/logout");
+//     navigate("/login");
+//   };
+
+//   if (loading) return <p className="p-10">Loading...</p>;
+
+//   /* ================== STATS ================== */
+//   const totalOrders = orders.length;
+//   const pendingOrders = orders.filter(o => o.status === "Pending").length;
+//   const fulfilledOrders = orders.filter(o => o.status === "Fulfilled").length;
+
+//   return (
+//     <div className="min-h-screen bg-slate-50">
+//       {/* NAV */}
+//       <nav className="flex justify-between items-center p-4 bg-white border-b">
+//         <h2 className="flex items-center gap-2">
+//           <ShoppingCart /> Admin Panel
+//         </h2>
+//         <Button variant="danger" size="sm" onClick={logout}>
+//           <LogOut className="inline w-4 h-4 mr-1" />
+//           Logout
+//         </Button>
+//       </nav>
+
+//       <div className="p-8 space-y-8">
+//         {/* STATS */}
+//         <div className="grid grid-cols-3 gap-6">
+//           <Card>📦 Total Orders: {totalOrders}</Card>
+//           <Card>⏳ Pending: {pendingOrders}</Card>
+//           <Card>✅ Fulfilled: {fulfilledOrders}</Card>
+//         </div>
+
+//         {/* PRODUCTS */}
+//         <Card>
+//           <div className="flex justify-between mb-4">
+//             <h3>Products</h3>
+//             <Button variant="gradient" onClick={addProduct}>
+//               <Plus className="w-4 h-4 mr-1 inline" /> Add
+//             </Button>
+//           </div>
+
+//           <table className="w-full">
+//             <thead>
+//               <tr className="border-b">
+//                 <th>Name</th>
+//                 <th>Price</th>
+//                 <th>Stock</th>
+//                 <th></th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {products.map(p => (
+//                 <tr key={p._id} className="border-b">
+//                   <td>{p.name}</td>
+//                   <td>${p.price}</td>
+//                   <td>{p.stock}</td>
+//                   <td>
+//                     <Button
+//                       variant="danger"
+//                       size="xs"
+//                       onClick={() => deleteProduct(p._id)}
+//                     >
+//                       <Trash2 className="w-3 h-3" />
+//                     </Button>
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </Card>
+
+//         {/* ORDERS */}
+//         <Card>
+//           <h3 className="mb-4">Orders</h3>
+//           <table className="w-full">
+//             <thead>
+//               <tr className="border-b">
+//                 <th>ID</th>
+//                 <th>Status</th>
+//                 <th></th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {orders.map(o => (
+//                 <tr key={o._id} className="border-b">
+//                   <td className="text-xs">{o._id.slice(0, 8)}...</td>
+//                   <td>{o.status}</td>
+//                   <td>
+//                     {o.status === "Pending" && (
+//                       <Button
+//                         size="xs"
+//                         variant="gradient"
+//                         onClick={() => updateOrderStatus(o._id)}
+//                       >
+//                         Fulfill
+//                       </Button>
+//                     )}
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </Card>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AdminDashboard;

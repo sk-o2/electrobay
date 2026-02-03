@@ -1,789 +1,37 @@
-
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-
-// const CheckoutPage = () => {
-//   const [user, setUser] = useState(null);
-//   const [cartItems, setCartItems] = useState([]);
-//   const [selectedAddress, setSelectedAddress] = useState("");
-//   const [newAddress, setNewAddress] = useState("");
-//   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
-//   const navigate = useNavigate();
-
-//   // ✅ Check login + fetch user + cart data
-//   const fetchCheckoutData = async () => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       if (!user) {
-//         navigate("/auth");
-//         return;
-//       }
-
-//       // Fetch user details
-//       const userRes = await axios.get("http://localhost:5000/api/auth/me", {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       setUser(userRes.data);
-//       setSelectedAddress(userRes.data.address || "");
-
-//       // Fetch cart items
-//       const cartRes = await axios.get("http://localhost:5000/api/cart", {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       setCartItems(cartRes.data);
-//     } catch (error) {
-//       console.error("Checkout fetch failed:", error);
-//       navigate("/auth");
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchCheckoutData();
-//   }, []);
-
-//   // ✅ Place order
-//   const handlePlaceOrder = async () => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       if (!token) return navigate("/auth");
-
-//       const deliveryAddress = newAddress || selectedAddress;
-//       if (!deliveryAddress) {
-//         alert("Please select or enter a delivery address");
-//         return;
-//       }
-
-//       const res = await axios.post(
-//         "http://localhost:5000/api/orders",
-//         {
-//           items: cartItems,
-//           address: deliveryAddress,
-//         },
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
-
-//       if (res.status === 201) {
-//         alert("Order placed successfully!");
-//         navigate("/orders");
-//       }
-//     } catch (err) {
-//       console.error("Order error:", err);
-//       alert("Failed to place order");
-//     }
-//   };
-
-//   // ✅ Payment popup simulation
-//   const handlePayment = () => {
-//     setShowPaymentPopup(true);
-//   };
-
-//   const confirmPayment = () => {
-//     setShowPaymentPopup(false);
-//     handlePlaceOrder();
-//   };
-
-//   const cancelPayment = () => {
-//     setShowPaymentPopup(false);
-//   };
-
-//   return (
-//     <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
-//       {/* Navbar */}
-//       <nav className="bg-[#F1F5F9] shadow-md py-4 px-6 flex justify-between items-center">
-//         <div
-//           className="text-xl font-bold text-[#2D7D9A] cursor-pointer"
-//           onClick={() => navigate("/")}
-//         >
-//           CircuitHub
-//         </div>
-//         <div>
-//           <button
-//             onClick={() => navigate("/cart")}
-//             className="bg-[#3BA8C8] text-white px-4 py-2 rounded-lg hover:bg-[#2D7D9A]"
-//           >
-//             Back to Cart
-//           </button>
-//         </div>
-//       </nav>
-
-//       {/* Checkout Section */}
-//       <div className="flex flex-col md:flex-row justify-between px-6 py-10 gap-6">
-//         {/* Left - Address & Payment */}
-//         <div className="w-full md:w-1/2 bg-white rounded-xl shadow-md p-6 border border-[#E2E8F0]">
-//           <h2 className="text-2xl font-semibold text-[#2D7D9A] mb-6">
-//             Checkout Details
-//           </h2>
-
-//           {/* Address Dropdown */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               Delivery Address
-//             </label>
-//             <select
-//               value={selectedAddress}
-//               onChange={(e) => setSelectedAddress(e.target.value)}
-//               className="w-full p-3 border rounded-lg text-[#1E293B]"
-//             >
-//               <option value="">Select Saved Address</option>
-//               {user?.address && <option value={user.address}>{user.address}</option>}
-//             </select>
-//           </div>
-
-//           {/* New Address */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               New Address (Optional)
-//             </label>
-//             <textarea
-//               rows="3"
-//               value={newAddress}
-//               onChange={(e) => setNewAddress(e.target.value)}
-//               placeholder="Enter new delivery address..."
-//               className="w-full p-3 border rounded-lg text-[#1E293B] resize-none"
-//             ></textarea>
-//           </div>
-
-//           {/* Payment Dropdown */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               Payment Method
-//             </label>
-//             <button
-//               onClick={handlePayment}
-//               className="w-full bg-[#F9A826] text-[#1E293B] py-3 rounded-lg hover:bg-[#3BA8C8] hover:text-white transition"
-//             >
-//               Proceed to Payment
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Right - Order Summary */}
-//         <div className="w-full md:w-1/2 bg-white rounded-xl shadow-md p-6 border border-[#E2E8F0]">
-//           <h2 className="text-2xl font-semibold text-[#2D7D9A] mb-6">
-//             Order Summary
-//           </h2>
-
-//           {cartItems.length === 0 ? (
-//             <p className="text-[#64748B]">No items in your cart.</p>
-//           ) : (
-//             <>
-//               <ul className="divide-y divide-[#E2E8F0] mb-6">
-//                 {cartItems.map((item) => (
-//                   <li
-//                     key={item._id}
-//                     className="flex justify-between py-3 text-[#1E293B]"
-//                   >
-//                     <span>{item.product.name}</span>
-//                     <span>${item.product.price}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-
-//               <div className="flex justify-between text-lg font-semibold text-[#1E293B] mb-4">
-//                 <span>Total:</span>
-//                 <span>
-//                   $
-//                   {cartItems
-//                     .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-//                     .toFixed(2)}
-//                 </span>
-//               </div>
-
-//               <button
-//                 onClick={handlePayment}
-//                 className="w-full bg-[#3BA8C8] text-white py-3 rounded-lg hover:bg-[#2D7D9A] transition"
-//               >
-//                 Place Order
-//               </button>
-//             </>
-//           )}
-//         </div>
-//       </div>
-
-//       {/* Payment Popup */}
-//       {showPaymentPopup && (
-//         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-//           <div className="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
-//             <h3 className="text-xl font-semibold text-[#1E293B] mb-4">
-//               Confirm Payment
-//             </h3>
-//             <p className="text-[#64748B] mb-6">
-//               Proceed with your selected payment method?
-//             </p>
-//             <div className="flex justify-center gap-4">
-//               <button
-//                 onClick={confirmPayment}
-//                 className="bg-[#3BA8C8] text-white px-4 py-2 rounded-lg hover:bg-[#2D7D9A]"
-//               >
-//                 Confirm
-//               </button>
-//               <button
-//                 onClick={cancelPayment}
-//                 className="bg-gray-300 text-[#1E293B] px-4 py-2 rounded-lg hover:bg-gray-400"
-//               >
-//                 Cancel
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Footer */}
-//       <footer className="bg-[#1E293B] text-[#F8FAFC] text-center py-6 mt-10">
-//         <p>© {new Date().getFullYear()} CircuitHub. All rights reserved.</p>
-//       </footer>
-//     </div>
-//   );
-// };
-
-// export default CheckoutPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // src/pages/CheckoutPage.jsx
-// import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext"; // Use your AuthContext
-// import api from "../utils/api"; // Axios instance configured with withCredentials: true
-
-// const CheckoutPage = () => {
-//   const { user, loading } = useAuth(); // Get auth user and loading flag
-//   const [cartItems, setCartItems] = useState([]);
-//   const [selectedAddress, setSelectedAddress] = useState("");
-//   const [newAddress, setNewAddress] = useState("");
-//   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
-//   const navigate = useNavigate();
-
-//   // Fetch cart items when user is authenticated and loading completes
-//   useEffect(() => {
-//     if (loading) return; // Wait until auth loading completes
-//     if (!user) {
-//       navigate("/auth", { replace: true });
-//       return;
-//     }
-
-//     const fetchCartItems = async () => {
-//       try {
-//         const res = await api.get("/api/cart");
-//         setCartItems(res.data.cart?.items || []);
-//       } catch (error) {
-//         console.error("Failed to load cart items", error);
-//         setCartItems([]);
-//       }
-//     };
-
-//     fetchCartItems();
-//     setSelectedAddress(user.address || "");
-//   }, [user, loading, navigate]);
-
-//   // Place order handler - uses cookie-based auth, no manual token passing
-//   const handlePlaceOrder = async () => {
-//     if (!user) {
-//       navigate("/auth", { replace: true });
-//       return;
-//     }
-
-//     const deliveryAddress = newAddress || selectedAddress;
-//     if (!deliveryAddress) {
-//       alert("Please select or enter a delivery address");
-//       return;
-//     }
-
-//     try {
-//       const res = await api.post("/api/orders", {
-//         items: cartItems,
-//         address: deliveryAddress,
-//       });
-
-//       if (res.status === 201) {
-//         alert("Order placed successfully!");
-//         navigate("/orders");
-//       }
-//     } catch (error) {
-//       console.error("Failed to place order:", error);
-//       alert("Failed to place order");
-//     }
-//   };
-
-//   // Payment popup handlers (if needed)
-//   const handlePayment = () => setShowPaymentPopup(true);
-//   const confirmPayment = () => {
-//     setShowPaymentPopup(false);
-//     handlePlaceOrder();
-//   };
-//   const cancelPayment = () => setShowPaymentPopup(false);
-
-//   if (loading) return <p>Loading...</p>;
-
-//   return (
-//     <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
-//       {/* Navbar */}
-//       <nav className="bg-[#F1F5F9] shadow-md py-4 px-6 flex justify-between items-center">
-//         <div
-//           className="text-xl font-bold text-[#2D7D9A] cursor-pointer"
-//           onClick={() => navigate("/")}
-//         >
-//           CircuitHub
-//         </div>
-//         <div>
-//           <button
-//             onClick={() => navigate("/cart")}
-//             className="bg-[#3BA8C8] text-white px-4 py-2 rounded-lg hover:bg-[#2D7D9A]"
-//           >
-//             Back to Cart
-//           </button>
-//         </div>
-//       </nav>
-
-//       {/* Checkout Section */}
-//       <div className="flex flex-col md:flex-row justify-between px-6 py-10 gap-6">
-//         {/* Left - Address & Payment */}
-//         <div className="w-full md:w-1/2 bg-white rounded-xl shadow-md p-6 border border-[#E2E8F0]">
-//           <h2 className="text-2xl font-semibold text-[#2D7D9A] mb-6">
-//             Checkout Details
-//           </h2>
-
-//           {/* Address Dropdown */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               Delivery Address
-//             </label>
-//             <select
-//               value={selectedAddress}
-//               onChange={(e) => setSelectedAddress(e.target.value)}
-//               className="w-full p-3 border rounded-lg text-[#1E293B]"
-//             >
-//               <option value="">Select Saved Address</option>
-//               {user?.address && <option value={user.address}>{user.address}</option>}
-//             </select>
-//           </div>
-
-//           {/* New Address */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               New Address (Optional)
-//             </label>
-//             <textarea
-//               rows="3"
-//               value={newAddress}
-//               onChange={(e) => setNewAddress(e.target.value)}
-//               placeholder="Enter new delivery address..."
-//               className="w-full p-3 border rounded-lg text-[#1E293B] resize-none"
-//             ></textarea>
-//           </div>
-
-//           {/* Payment Button */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               Payment Method
-//             </label>
-//             <button
-//               onClick={handlePayment}
-//               className="w-full bg-[#F9A826] text-[#1E293B] py-3 rounded-lg hover:bg-[#3BA8C8] hover:text-white transition"
-//             >
-//               Proceed to Payment
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Right - Order Summary */}
-//         <div className="w-full md:w-1/2 bg-white rounded-xl shadow-md p-6 border border-[#E2E8F0]">
-//           <h2 className="text-2xl font-semibold text-[#2D7D9A] mb-6">Order Summary</h2>
-
-//           {cartItems.length === 0 ? (
-//             <p className="text-[#64748B]">No items in your cart.</p>
-//           ) : (
-//             <>
-//               <ul className="divide-y divide-[#E2E8F0] mb-6">
-//                 {cartItems.map((item) => (
-//                   <li
-//                     key={item._id}
-//                     className="flex justify-between py-3 text-[#1E293B]"
-//                   >
-//                     <span>{item.product.name}</span>
-//                     <span>${item.product.price}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-
-//               <div className="flex justify-between text-lg font-semibold text-[#1E293B] mb-4">
-//                 <span>Total:</span>
-//                 <span>
-//                   $
-//                   {cartItems
-//                     .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-//                     .toFixed(2)}
-//                 </span>
-//               </div>
-
-//               <button
-//                 onClick={handlePayment}
-//                 className="w-full bg-[#3BA8C8] text-white py-3 rounded-lg hover:bg-[#2D7D9A] transition"
-//               >
-//                 Place Order
-//               </button>
-//             </>
-//           )}
-//         </div>
-//       </div>
-
-//       {/* Payment Popup */}
-//       {showPaymentPopup && (
-//         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-//           <div className="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
-//             <h3 className="text-xl font-semibold text-[#1E293B] mb-4">
-//               Confirm Payment
-//             </h3>
-//             <p className="text-[#64748B] mb-6">
-//               Proceed with your selected payment method?
-//             </p>
-//             <div className="flex justify-center gap-4">
-//               <button
-//                 onClick={confirmPayment}
-//                 className="bg-[#3BA8C8] text-white px-4 py-2 rounded-lg hover:bg-[#2D7D9A]"
-//               >
-//                 Confirm
-//               </button>
-//               <button
-//                 onClick={cancelPayment}
-//                 className="bg-gray-300 text-[#1E293B] px-4 py-2 rounded-lg hover:bg-gray-400"
-//               >
-//                 Cancel
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Footer */}
-//       <footer className="bg-[#1E293B] text-[#F8FAFC] text-center py-6 mt-10">
-//         <p>© {new Date().getFullYear()} CircuitHub. All rights reserved.</p>
-//       </footer>
-//     </div>
-//   );
-// };
-
-// export default CheckoutPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext"; // Use your AuthContext
-// import api from "../utils/api"; // Axios instance configured with withCredentials: true
-
-// const CheckoutPage = () => {
-//   const { user, loading } = useAuth();
-//   const [cartItems, setCartItems] = useState([]);
-//   const [selectedAddress, setSelectedAddress] = useState("");
-//   const [newAddress, setNewAddress] = useState("");
-//   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
-//   const navigate = useNavigate();
-
-//   // Helper to format address object for display
-//   const formatAddress = (addr) => {
-//     if (!addr) return "";
-//     return `${addr.line1}, ${addr.city}, ${addr.state}, ${addr.postalCode}, ${addr.country}`;
-//   };
-
-//   useEffect(() => {
-//     if (loading) return;
-//     if (!user) {
-//       navigate("/auth", { replace: true });
-//       return;
-//     }
-
-//     const fetchCartItems = async () => {
-//       try {
-//         const res = await api.get("/api/cart");
-//         setCartItems(res.data.cart?.items || []);
-//       } catch (error) {
-//         console.error("Failed to load cart items", error);
-//         setCartItems([]);
-//       }
-//     };
-
-//     fetchCartItems();
-
-//     // Initialize selectedAddress with stringified user address
-//     if (user.address) {
-//       setSelectedAddress(JSON.stringify(user.address));
-//     } else {
-//       setSelectedAddress("");
-//     }
-//   }, [user, loading, navigate]);
-
-//   // When user selects a saved address (stringified), parse it back to object as needed
-//   const handleAddressChange = (e) => {
-//     setSelectedAddress(e.target.value);
-//   };
-
-//   const handlePlaceOrder = async () => {
-//     if (!user) {
-//       navigate("/auth", { replace: true });
-//       return;
-//     }
-
-//     let deliveryAddress;
-//     if (newAddress.trim()) {
-//       // If new address entered, parse it or send as string (modify as you prefer)
-//       try {
-//         deliveryAddress = JSON.parse(newAddress);
-//       } catch {
-//         deliveryAddress = newAddress; // fallback if not JSON
-//       }
-//     } else if (selectedAddress) {
-//       try {
-//         deliveryAddress = JSON.parse(selectedAddress);
-//       } catch {
-//         deliveryAddress = selectedAddress;
-//       }
-//     } else {
-//       alert("Please select or enter a delivery address");
-//       return;
-//     }
-
-//     try {
-//       const res = await api.post("/api/orders", {
-//         items: cartItems,
-//         address: deliveryAddress,
-//       });
-
-//       if (res.status === 201) {
-//         alert("Order placed successfully!");
-//         navigate("/orders");
-//       }
-//     } catch (error) {
-//       console.error("Failed to place order:", error);
-//       alert("Failed to place order");
-//     }
-//   };
-
-//   const handlePayment = () => setShowPaymentPopup(true);
-//   const confirmPayment = () => {
-//     setShowPaymentPopup(false);
-//     handlePlaceOrder();
-//   };
-//   const cancelPayment = () => setShowPaymentPopup(false);
-
-//   if (loading) return <p>Loading...</p>;
-
-//   return (
-//     <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
-//       {/* Navbar */}
-//       <nav className="bg-[#F1F5F9] shadow-md py-4 px-6 flex justify-between items-center">
-//         <div
-//           className="text-xl font-bold text-[#2D7D9A] cursor-pointer"
-//           onClick={() => navigate("/")}
-//         >
-//           CircuitHub
-//         </div>
-//         <div>
-//           <button
-//             onClick={() => navigate("/cart")}
-//             className="bg-[#3BA8C8] text-white px-4 py-2 rounded-lg hover:bg-[#2D7D9A]"
-//           >
-//             Back to Cart
-//           </button>
-//         </div>
-//       </nav>
-
-//       {/* Checkout Section */}
-//       <div className="flex flex-col md:flex-row justify-between px-6 py-10 gap-6">
-//         {/* Left - Address & Payment */}
-//         <div className="w-full md:w-1/2 bg-white rounded-xl shadow-md p-6 border border-[#E2E8F0]">
-//           <h2 className="text-2xl font-semibold text-[#2D7D9A] mb-6">
-//             Checkout Details
-//           </h2>
-
-//           {/* Address Dropdown */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               Delivery Address
-//             </label>
-//             <select
-//               value={selectedAddress}
-//               onChange={handleAddressChange}
-//               className="w-full p-3 border rounded-lg text-[#1E293B]"
-//             >
-//               <option value="">Select Saved Address</option>
-//               {user?.address && (
-//                 <option value={JSON.stringify(user.address)}>
-//                   {formatAddress(user.address)}
-//                 </option>
-//               )}
-//             </select>
-//           </div>
-
-//           {/* New Address */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               New Address (Optional)
-//             </label>
-//             <textarea
-//               rows="3"
-//               value={newAddress}
-//               onChange={(e) => setNewAddress(e.target.value)}
-//               placeholder="Enter new delivery address as JSON..."
-//               className="w-full p-3 border rounded-lg text-[#1E293B] resize-none"
-//             ></textarea>
-//           </div>
-
-//           {/* Payment Button */}
-//           <div className="mb-6">
-//             <label className="block text-[#1E293B] font-medium mb-2">
-//               Payment Method
-//             </label>
-//             <button
-//               onClick={handlePayment}
-//               className="w-full bg-[#F9A826] text-[#1E293B] py-3 rounded-lg hover:bg-[#3BA8C8] hover:text-white transition"
-//             >
-//               Proceed to Payment
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Right - Order Summary */}
-//         <div className="w-full md:w-1/2 bg-white rounded-xl shadow-md p-6 border border-[#E2E8F0]">
-//           <h2 className="text-2xl font-semibold text-[#2D7D9A] mb-6">
-//             Order Summary
-//           </h2>
-
-//           {cartItems.length === 0 ? (
-//             <p className="text-[#64748B]">No items in your cart.</p>
-//           ) : (
-//             <>
-//               <ul className="divide-y divide-[#E2E8F0] mb-6">
-//                 {cartItems.map((item) => (
-//                   <li
-//                     key={item._id}
-//                     className="flex justify-between py-3 text-[#1E293B]"
-//                   >
-//                     <span>{item.product.name}</span>
-//                     <span>${item.product.price}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-
-//               <div className="flex justify-between text-lg font-semibold text-[#1E293B] mb-4">
-//                 <span>Total:</span>
-//                 <span>
-//                   $
-//                   {cartItems
-//                     .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-//                     .toFixed(2)}
-//                 </span>
-//               </div>
-
-//               <button
-//                 onClick={handlePayment}
-//                 className="w-full bg-[#3BA8C8] text-white py-3 rounded-lg hover:bg-[#2D7D9A] transition"
-//               >
-//                 Place Order
-//               </button>
-//             </>
-//           )}
-//         </div>
-//       </div>
-
-//       {/* Payment Popup */}
-//       {showPaymentPopup && (
-//         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-//           <div className="bg-white rounded-xl shadow-lg p-6 w-80 text-center">
-//             <h3 className="text-xl font-semibold text-[#1E293B] mb-4">
-//               Confirm Payment
-//             </h3>
-//             <p className="text-[#64748B] mb-6">
-//               Proceed with your selected payment method?
-//             </p>
-//             <div className="flex justify-center gap-4">
-//               <button
-//                 onClick={confirmPayment}
-//                 className="bg-[#3BA8C8] text-white px-4 py-2 rounded-lg hover:bg-[#2D7D9A]"
-//               >
-//                 Confirm
-//               </button>
-//               <button
-//                 onClick={cancelPayment}
-//                 className="bg-gray-300 text-[#1E293B] px-4 py-2 rounded-lg hover:bg-gray-400"
-//               >
-//                 Cancel
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Footer */}
-//       <footer className="bg-[#1E293B] text-[#F8FAFC] text-center py-6 mt-10">
-//         <p>© {new Date().getFullYear()} CircuitHub. All rights reserved.</p>
-//       </footer>
-//     </div>
-//   );
-// };
-
-// export default CheckoutPage;
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
-import { 
-  ShoppingCart, 
-  MapPin, 
-  CreditCard, 
-  CheckCircle, 
-  Home, 
-  Package, 
+import { sendOrderEmail } from "../utils/sendOrderEmail";
+import emailjs from "@emailjs/browser";
+import electro from "../assets/electro.png";
+import {
+  ShoppingCart,
+  MapPin,
+  CreditCard,
+  CheckCircle,
+  Home,
+  Package,
   Truck,
   Lock,
-  X
+  X,
 } from "lucide-react";
 
 const CheckoutPage = () => {
   const { user, loading } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [newAddress, setNewAddress] = useState("");
+  // const [newAddress, setNewAddress] = useState("");
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [processingOrder, setProcessingOrder] = useState(false);
   const navigate = useNavigate();
+  const [address, setAddress] = useState({
+    line1: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+  });
 
   // Helper to format address object for display
   const formatAddress = (addr) => {
@@ -822,52 +70,99 @@ const CheckoutPage = () => {
     setSelectedAddress(e.target.value);
   };
 
-  const handlePlaceOrder = async () => {
-    if (!user) {
-      navigate("/auth", { replace: true });
-      return;
-    }
+  // const handlePlaceOrder = async () => {
+  //   if (!user) {
+  //     navigate("/auth", { replace: true });
+  //     return;
+  //   }
 
-    let deliveryAddress;
-    if (newAddress.trim()) {
-      try {
-        deliveryAddress = JSON.parse(newAddress);
-      } catch {
-        deliveryAddress = newAddress;
-      }
-    } else if (selectedAddress) {
-      try {
-        deliveryAddress = JSON.parse(selectedAddress);
-      } catch {
-        deliveryAddress = selectedAddress;
-      }
-    } else {
-      alert("Please select or enter a delivery address");
+  //   let deliveryAddress;
+  //   if (newAddress.trim()) {
+  //     try {
+  //       deliveryAddress = JSON.parse(newAddress);
+  //     } catch {
+  //       deliveryAddress = newAddress;
+  //     }
+  //   } else if (selectedAddress) {
+  //     try {
+  //       deliveryAddress = JSON.parse(selectedAddress);
+  //     } catch {
+  //       deliveryAddress = selectedAddress;
+  //     }
+  //   } else {
+  //     alert("Please select or enter a delivery address");
+  //     return;
+  //   }
+
+  //   try {
+  //     setProcessingOrder(true);
+  //     const res = await api.post("/api/orders", {
+  //       items: cartItems,
+  //       address: deliveryAddress,
+  //     });
+
+  //     if (res.status === 201) {
+  //       alert("Order placed successfully!");
+  //       navigate("/my-orders");
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to place order:", error);
+  //     alert("Failed to place order");
+  //   } finally {
+  //     setProcessingOrder(false);
+  //   }
+  // };
+  const handlePlaceOrder = async () => {
+    if(selectedAddress) {
+      setAddress(JSON.parse(selectedAddress));
+    }
+    else if (!address.line1 || !address.city || !address.postalCode) {
+      alert("Please fill in the delivery address");
       return;
     }
 
     try {
       setProcessingOrder(true);
+
       const res = await api.post("/api/orders", {
         items: cartItems,
-        address: deliveryAddress,
+        address, // 👈 always an object
       });
 
+      // if (res.status === 201) {
+      //   alert("Order placed successfully!");
+      //   navigate("/");
+      // }
       if (res.status === 201) {
-        alert("Order placed successfully!");
-        navigate("/orders");
-      }
-    } catch (error) {
-      console.error("Failed to place order:", error);
-      alert("Failed to place order");
+  try {
+    const createdOrder = res.data.order;
+
+    await sendOrderEmail({
+      user,
+      order: createdOrder,
+    });
+  } catch (err) {
+    console.error("Email failed:", err);
+  }
+
+  alert("Order placed successfully!");
+  navigate("/profile");
+}
+
+    } catch (err) {
+      console.error(err);
+      alert("Order failed");
     } finally {
       setProcessingOrder(false);
     }
   };
 
-  const handlePayment = () => {
-    if (!selectedAddress && !newAddress.trim()) {
-      alert("Please select or enter a delivery address");
+  const handlePayment = async () => {
+    if(selectedAddress) {
+      setAddress(JSON.parse(selectedAddress));
+    }
+  else if (!address.line1 || !address.city || !address.postalCode) {
+      alert("Please fill in the delivery address");
       return;
     }
     setShowPaymentPopup(true);
@@ -880,7 +175,10 @@ const CheckoutPage = () => {
 
   const cancelPayment = () => setShowPaymentPopup(false);
 
-  const totalAmount = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const totalAmount = cartItems.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0,
+  );
   const shippingCost = 0; // Free shipping
   const discount = totalAmount * 0.1; // 10% discount
   const finalTotal = totalAmount - discount + shippingCost;
@@ -904,17 +202,21 @@ const CheckoutPage = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div 
+              <div
                 className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center cursor-pointer"
                 onClick={() => navigate("/")}
               >
                 <ShoppingCart className="w-6 h-6 text-white" />
               </div>
-              <span 
+              <span
                 className="text-slate-900 font-bold cursor-pointer"
                 onClick={() => navigate("/")}
               >
-                ElectroBay
+                <img
+                  src={electro}
+                  alt="ElectroBay Logo"
+                  className="h-8 w-auto"
+                />
               </span>
             </div>
 
@@ -945,7 +247,9 @@ const CheckoutPage = () => {
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
           <div className="mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">Checkout</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
+              Checkout
+            </h1>
             <p className="text-slate-600">Complete your order securely</p>
           </div>
 
@@ -958,7 +262,9 @@ const CheckoutPage = () => {
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-blue-600" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900">Delivery Address</h2>
+                  <h2 className="text-xl font-bold text-slate-900">
+                    Delivery Address
+                  </h2>
                 </div>
 
                 {/* Saved Address Dropdown */}
@@ -985,16 +291,68 @@ const CheckoutPage = () => {
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Or Enter New Address
                   </label>
-                  <textarea
-                    rows="4"
-                    value={newAddress}
-                    onChange={(e) => setNewAddress(e.target.value)}
-                    placeholder='{"line1": "123 Main St", "city": "City", "state": "State", "postalCode": "12345", "country": "Country"}'
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 resize-none font-mono text-sm"
-                  ></textarea>
-                  <p className="text-xs text-slate-500 mt-2">
-                    Enter address in JSON format or select from saved addresses above
-                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Address line"
+                      value={address.line1}
+                      onChange={(e) =>
+                        setAddress({ ...address, line1: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
+               focus:border-black focus:outline-none focus:ring-1 focus:ring-black
+               transition"
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="City"
+                      value={address.city}
+                      onChange={(e) =>
+                        setAddress({ ...address, city: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
+               focus:border-black focus:outline-none focus:ring-1 focus:ring-black
+               transition"
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="State"
+                      value={address.state}
+                      onChange={(e) =>
+                        setAddress({ ...address, state: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
+               focus:border-black focus:outline-none focus:ring-1 focus:ring-black
+               transition"
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="Postal Code"
+                      value={address.postalCode}
+                      onChange={(e) =>
+                        setAddress({ ...address, postalCode: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
+               focus:border-black focus:outline-none focus:ring-1 focus:ring-black
+               transition"
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="Country"
+                      value={address.country}
+                      onChange={(e) =>
+                        setAddress({ ...address, country: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
+               focus:border-black focus:outline-none focus:ring-1 focus:ring-black
+               transition sm:col-span-2"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -1004,21 +362,27 @@ const CheckoutPage = () => {
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <Truck className="w-5 h-5 text-green-600" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900">Delivery Method</h2>
+                  <h2 className="text-xl font-bold text-slate-900">
+                    Delivery Method
+                  </h2>
                 </div>
 
                 <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <input 
-                        type="radio" 
-                        checked 
+                      <input
+                        type="radio"
+                        checked
                         readOnly
-                        className="w-4 h-4 text-blue-600" 
+                        className="w-4 h-4 text-blue-600"
                       />
                       <div>
-                        <p className="font-medium text-slate-900">Standard Delivery</p>
-                        <p className="text-sm text-slate-600">3-5 business days</p>
+                        <p className="font-medium text-slate-900">
+                          Standard Delivery
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          3-5 business days
+                        </p>
                       </div>
                     </div>
                     <span className="font-semibold text-green-600">FREE</span>
@@ -1032,21 +396,27 @@ const CheckoutPage = () => {
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                     <CreditCard className="w-5 h-5 text-purple-600" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900">Payment Method</h2>
+                  <h2 className="text-xl font-bold text-slate-900">
+                    Payment Method
+                  </h2>
                 </div>
 
                 <div className="space-y-3">
                   <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
                     <div className="flex items-center gap-3">
-                      <input 
-                        type="radio" 
-                        checked 
+                      <input
+                        type="radio"
+                        checked
                         readOnly
-                        className="w-4 h-4 text-blue-600" 
+                        className="w-4 h-4 text-blue-600"
                       />
                       <div className="flex-1">
-                        <p className="font-medium text-slate-900">Cash on Delivery</p>
-                        <p className="text-sm text-slate-600">Pay when you receive your order</p>
+                        <p className="font-medium text-slate-900">
+                          Cash on Delivery
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          Pay when you receive your order
+                        </p>
                       </div>
                       <Lock className="w-5 h-5 text-slate-400" />
                     </div>
@@ -1065,7 +435,9 @@ const CheckoutPage = () => {
             {/* Right - Order Summary (Sticky) */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 lg:sticky lg:top-24">
-                <h2 className="text-xl font-bold text-slate-900 mb-6">Order Summary</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-6">
+                  Order Summary
+                </h2>
 
                 {cartItems.length === 0 ? (
                   <div className="text-center py-8">
@@ -1089,11 +461,13 @@ const CheckoutPage = () => {
                         >
                           <div className="w-16 h-16 bg-slate-50 rounded-lg flex items-center justify-center overflow-hidden">
                             <img
-                              src={item.product.image}
+                              src={
+                                item.product.images?.[0] || item.product.image
+                              }
                               alt={item.product.name}
                               className="max-h-full object-contain p-1"
                               onError={(e) => {
-                                e.target.src = `https://via.placeholder.com/64x64?text=${encodeURIComponent(item.product.name || 'Product')}`;
+                                e.target.src = `https://via.placeholder.com/64x64?text=${encodeURIComponent(item.product.name || "Product")}`;
                               }}
                             />
                           </div>
@@ -1102,9 +476,14 @@ const CheckoutPage = () => {
                               {item.product.name}
                             </h4>
                             <div className="flex items-center justify-between mt-1">
-                              <span className="text-xs text-slate-500">Qty: {item.quantity}</span>
+                              <span className="text-xs text-slate-500">
+                                Qty: {item.quantity}
+                              </span>
                               <span className="text-sm font-semibold text-slate-900">
-                                ${(item.product.price * item.quantity).toFixed(2)}
+                                ₹
+                                {(item.product.price * item.quantity).toFixed(
+                                  2,
+                                )}
                               </span>
                             </div>
                           </div>
@@ -1116,14 +495,18 @@ const CheckoutPage = () => {
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between text-slate-600">
                         <span>Subtotal</span>
-                        <span className="font-medium">${totalAmount.toFixed(2)}</span>
+                        <span className="font-medium">
+                          ₹{totalAmount.toFixed(2)}
+                        </span>
                       </div>
-                      
+
                       <div className="flex justify-between text-green-600">
                         <span>Discount (10%)</span>
-                        <span className="font-medium">- ${discount.toFixed(2)}</span>
+                        <span className="font-medium">
+                          - ₹{discount.toFixed(2)}
+                        </span>
                       </div>
-                      
+
                       <div className="flex justify-between text-slate-600">
                         <span>Shipping</span>
                         <span className="font-medium text-green-600">FREE</span>
@@ -1131,9 +514,11 @@ const CheckoutPage = () => {
 
                       <div className="border-t border-slate-200 pt-3">
                         <div className="flex justify-between items-center">
-                          <span className="text-lg font-bold text-slate-900">Total</span>
+                          <span className="text-lg font-bold text-slate-900">
+                            Total
+                          </span>
                           <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            ${finalTotal.toFixed(2)}
+                            ₹{finalTotal.toFixed(2)}
                           </span>
                         </div>
                       </div>
@@ -1159,7 +544,8 @@ const CheckoutPage = () => {
                     </button>
 
                     <p className="text-xs text-slate-500 text-center mt-4">
-                      By placing this order, you agree to our terms and conditions
+                      By placing this order, you agree to our terms and
+                      conditions
                     </p>
                   </>
                 )}
@@ -1196,7 +582,9 @@ const CheckoutPage = () => {
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">Payment Method</p>
-                    <p className="font-semibold text-slate-900">Cash on Delivery</p>
+                    <p className="font-semibold text-slate-900">
+                      Cash on Delivery
+                    </p>
                   </div>
                 </div>
 
@@ -1206,7 +594,9 @@ const CheckoutPage = () => {
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">Order Total</p>
-                    <p className="font-semibold text-slate-900">${finalTotal.toFixed(2)}</p>
+                    <p className="font-semibold text-slate-900">
+                      ₹{finalTotal.toFixed(2)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1248,7 +638,11 @@ const CheckoutPage = () => {
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                   <ShoppingCart className="w-6 h-6 text-white" />
                 </div>
-                <span className="font-bold text-xl">ElectroBay</span>
+                <img
+                  src={electro}
+                  alt="ElectroBay Logo"
+                  className="h-8 w-auto"
+                />
               </div>
               <p className="text-white/70">
                 Your trusted partner for all electronics and development needs.
@@ -1260,17 +654,26 @@ const CheckoutPage = () => {
               <h4 className="font-bold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <button onClick={() => navigate("/")} className="text-white/70 hover:text-white transition">
+                  <button
+                    onClick={() => navigate("/")}
+                    className="text-white/70 hover:text-white transition"
+                  >
                     Home
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate("/products")} className="text-white/70 hover:text-white transition">
+                  <button
+                    onClick={() => navigate("/products")}
+                    className="text-white/70 hover:text-white transition"
+                  >
                     Products
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate("/cart")} className="text-white/70 hover:text-white transition">
+                  <button
+                    onClick={() => navigate("/cart")}
+                    className="text-white/70 hover:text-white transition"
+                  >
                     Cart
                   </button>
                 </li>
@@ -1282,17 +685,26 @@ const CheckoutPage = () => {
               <h4 className="font-bold mb-4">Support</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-white/70 hover:text-white transition">
+                  <a
+                    href="#"
+                    className="text-white/70 hover:text-white transition"
+                  >
                     Help Center
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-white/70 hover:text-white transition">
+                  <a
+                    href="#"
+                    className="text-white/70 hover:text-white transition"
+                  >
                     Secure Checkout
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-white/70 hover:text-white transition">
+                  <a
+                    href="#"
+                    className="text-white/70 hover:text-white transition"
+                  >
                     Shipping Policy
                   </a>
                 </li>
@@ -1301,7 +713,9 @@ const CheckoutPage = () => {
           </div>
 
           <div className="border-t border-white/10 pt-8 text-center text-white/70">
-            <p>&copy; {new Date().getFullYear()} ElectroBay. All rights reserved.</p>
+            <p>
+              &copy; {new Date().getFullYear()} ElectroBay. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

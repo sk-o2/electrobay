@@ -33,62 +33,90 @@
 
 
 
-// mail/transporter.js
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+// // mail/transporter.js
+// import nodemailer from "nodemailer";
+// import dotenv from "dotenv";
 
-dotenv.config();
+// dotenv.config();
 
-if (!process.env.EMAIL_USER) {
-  console.warn("⚠️ EMAIL_USER is not set. Emails will fail until you set EMAIL_USER and EMAIL_PASS in .env");
-}
+// if (!process.env.EMAIL_USER) {
+//   console.warn("⚠️ EMAIL_USER is not set. Emails will fail until you set EMAIL_USER and EMAIL_PASS in .env");
+// }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+// });
 
-// verify transporter on startup so errors surface immediately
-const verifyTransporter = async () => {
-  try {
-    await transporter.verify();
-    console.log("📨 SMTP transporter verified (Gmail). Ready to send emails.");
-  } catch (err) {
-    console.error("❌ SMTP verification failed. Emails will not send.");
-    // Helpful guidance
-    console.error("   • Make sure EMAIL_USER and EMAIL_PASS are set in your .env");
-    console.error("   • If using Gmail, create an App Password (https://myaccount.google.com/apppasswords) after enabling 2-Step Verification.");
-    console.error("   • If you recently changed your password, update EMAIL_PASS.");
-    console.error("   • Full error:", err && err.message ? err.message : err);
-    // don't rethrow — keep server running; sendMail will throw when used
-  }
-};
+// // verify transporter on startup so errors surface immediately
+// const verifyTransporter = async () => {
+//   try {
+//     await transporter.verify();
+//     console.log("📨 SMTP transporter verified (Gmail). Ready to send emails.");
+//   } catch (err) {
+//     console.error("❌ SMTP verification failed. Emails will not send.");
+//     // Helpful guidance
+//     console.error("   • Make sure EMAIL_USER and EMAIL_PASS are set in your .env");
+//     console.error("   • If using Gmail, create an App Password (https://myaccount.google.com/apppasswords) after enabling 2-Step Verification.");
+//     console.error("   • If you recently changed your password, update EMAIL_PASS.");
+//     console.error("   • Full error:", err && err.message ? err.message : err);
+//     // don't rethrow — keep server running; sendMail will throw when used
+//   }
+// };
 
-await verifyTransporter();
+// await verifyTransporter();
+
+// export const sendMail = async ({ to, subject, html, text }) => {
+//   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+//     const msg = "EMAIL_USER or EMAIL_PASS not configured in environment";
+//     console.error("❌ sendMail aborted:", msg);
+//     throw new Error(msg);
+//   }
+
+//   try {
+//     const info = await transporter.sendMail({
+//       from: `"CircuitHub" <${process.env.EMAIL_USER}>`,
+//       to,
+//       subject,
+//       html,
+//       text,
+//     });
+
+//     console.log(`✅ Email sent to ${to}. messageId=${info.messageId}`);
+//     return info;
+//   } catch (err) {
+//     console.error("❌ sendMail error:", err && err.message ? err.message : err);
+//     throw err;
+//   }
+// };
+
+
+
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendMail = async ({ to, subject, html, text }) => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    const msg = "EMAIL_USER or EMAIL_PASS not configured in environment";
-    console.error("❌ sendMail aborted:", msg);
-    throw new Error(msg);
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY not configured");
   }
 
   try {
-    const info = await transporter.sendMail({
-      from: `"CircuitHub" <${process.env.EMAIL_USER}>`,
+    const data = await resend.emails.send({
+      from: "CircuitHub <onboarding@resend.dev>",
       to,
       subject,
       html,
       text,
     });
 
-    console.log(`✅ Email sent to ${to}. messageId=${info.messageId}`);
-    return info;
-  } catch (err) {
-    console.error("❌ sendMail error:", err && err.message ? err.message : err);
-    throw err;
+    console.log(`✅ Email sent to ${to}`, data.id);
+    return data;
+  } catch (error) {
+    console.error("❌ sendMail error:", error);
+    throw error;
   }
 };

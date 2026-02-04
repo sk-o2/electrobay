@@ -23,12 +23,13 @@ export default function ProductDetails() {
   const [related, setRelated] = useState([]);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+
+        const res = await axios.get(`${API}/api/products/${id}`);
         const prod = res.data?.product ?? res.data;
         // const prod = res.data?.data ?? res.data;
 

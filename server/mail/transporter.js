@@ -95,28 +95,45 @@
 
 
 
+// import { Resend } from "resend";
+
+// const resend = new Resend(process.env.RESEND_API_KEY);
+
+// export const sendMail = async ({ to, subject, html, text }) => {
+//   if (!process.env.RESEND_API_KEY) {
+//     throw new Error("RESEND_API_KEY not configured");
+//   }
+
+//   try {
+//     const data = await resend.emails.send({
+//       from: "ElectroBay <electrobay.here@gmail.com>",
+//       to,
+//       subject,
+//       html,
+//       text,
+//     });
+
+//     console.log(`✅ Email sent to ${to}`, data.id);
+//     return data;
+//   } catch (error) {
+//     console.error("❌ sendMail error:", error);
+//     throw error;
+//   }
+// };
+
+
 import { Resend } from "resend";
+import { verifyEmailTemplate, resetPasswordTemplate } from "./emailTemplates.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendMail = async ({ to, subject, html, text }) => {
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error("RESEND_API_KEY not configured");
-  }
-
-  try {
-    const data = await resend.emails.send({
-      from: "ElectroBay <electrobay.here@gmail.com>",
-      to,
-      subject,
-      html,
-      text,
-    });
-
-    console.log(`✅ Email sent to ${to}`, data.id);
-    return data;
-  } catch (error) {
-    console.error("❌ sendMail error:", error);
-    throw error;
-  }
+export const sendMail = async ({ to, subject, html }) => {
+  const message = await resend.emails.send({
+    from: process.env.EMAIL_FROM,
+    to,
+    subject,
+    html,
+  });
+  console.log(`✅ Email sent to ${to}. id=${message.id}`);
+  return message;
 };

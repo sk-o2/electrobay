@@ -34,7 +34,7 @@
     "circuithub": "npm run dev --prefix circuithub"
   },
   "devDependencies": {
-    "baseline-browser-mapping": "^2.9.11",
+    "baseline-browser-mapping": "^2.9.19",
     "vite": "^7.3.1"
   }
 }

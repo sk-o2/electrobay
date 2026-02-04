@@ -21,6 +21,7 @@ import adminProductRoutes from "./routes/admin.product.routes.js";
 
 const app = express();
 
+
 /* -------------------- MIDDLEWARES -------------------- */
 
 // Parse JSON body

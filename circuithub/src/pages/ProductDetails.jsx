@@ -390,9 +390,9 @@ export default function ProductDetails() {
             <div className="mt-4 lg:hidden bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <div className="text-2xl font-bold text-slate-900">${product.price}</div>
+                  <div className="text-2xl font-bold text-slate-900">₹{product.price}</div>
                   {product.mrp && (
-                    <div className="text-sm line-through text-slate-500">${product.mrp}</div>
+                    <div className="text-sm line-through text-slate-500">₹{product.mrp}</div>
                   )}
                 </div>
                 <div className="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-lg">
@@ -519,14 +519,14 @@ export default function ProductDetails() {
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
                     <div className="text-sm text-slate-500 mb-1">Price</div>
-                    <div className="text-3xl font-bold text-slate-900">${product.price}</div>
+                    <div className="text-3xl font-bold text-slate-900">₹{product.price}</div>
                     {product.mrp && (
-                      <div className="text-sm line-through text-slate-400">${product.mrp}</div>
+                      <div className="text-sm line-through text-slate-400">₹{product.mrp}</div>
                     )}
                   </div>
                   {product.mrp && (
                     <div className="bg-green-50 text-green-700 px-3 py-1 rounded-lg text-sm font-medium">
-                      Save ${(product.mrp - product.price).toFixed(2)}
+                      Save ₹{(product.mrp - product.price).toFixed(2)}
                     </div>
                   )}
                 </div>
@@ -599,7 +599,7 @@ export default function ProductDetails() {
                 </button>
 
                 <div className="flex-1">
-                  <div className="text-lg font-bold text-slate-900">${product.price}</div>
+                  <div className="text-lg font-bold text-slate-900">₹{product.price}</div>
                   <div className="text-xs text-slate-500">{product.delivery || "3-5 days"} delivery</div>
                 </div>
 
@@ -694,7 +694,7 @@ export default function ProductDetails() {
                       />
                     </div>
                     <div className="text-sm font-medium text-slate-900 line-clamp-2 mb-2">{r.name}</div>
-                    <div className="text-lg font-bold text-slate-900 mb-3">${r.price}</div>
+                    <div className="text-lg font-bold text-slate-900 mb-3">₹{r.price}</div>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();

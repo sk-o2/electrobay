@@ -1307,7 +1307,7 @@ function Navbar({
             </button>
             <button
               className="text-black hover:text-white transition-all duration-300 px-4 py-2 rounded-lg hover:bg-white/10"
-              onClick={onProjectsClick}
+              onClick={() => navigate("/products")}
             >
               Products
             </button>

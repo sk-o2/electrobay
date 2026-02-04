@@ -182,7 +182,7 @@ import { sendMail } from "../mail/transporter.js";
 import {
   verifyEmailTemplate,
   resetPasswordTemplate,
-} from "../utils/emailTemplates.js";
+} from "../mail/emailTemplates.js";
 
 /* =========================
    REGISTER

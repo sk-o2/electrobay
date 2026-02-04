@@ -123,7 +123,7 @@
 
 
 import { Resend } from "resend";
-import { verifyEmailTemplate, resetPasswordTemplate } from "./emailtemplates.js";
+import { verifyEmailTemplate, resetPasswordTemplate } from "./emailTemplates.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

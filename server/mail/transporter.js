@@ -106,7 +106,7 @@ export const sendMail = async ({ to, subject, html, text }) => {
 
   try {
     const data = await resend.emails.send({
-      from: "CircuitHub <onboarding@resend.dev>",
+      from: "ElectroBay <electrobay.here@gmail.com>",
       to,
       subject,
       html,

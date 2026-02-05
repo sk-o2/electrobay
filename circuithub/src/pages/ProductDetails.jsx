@@ -268,7 +268,7 @@ const API = import.meta.env.VITE_API_URL;
                 Categories
               </button>
               <button className="text-slate-700 hover:text-slate-900 transition">
-                Projects
+                Components
               </button>
               <div className="flex items-center gap-3">
                 {!user ? (
@@ -325,7 +325,7 @@ const API = import.meta.env.VITE_API_URL;
                   Categories
                 </button>
                 <button className="text-slate-700 hover:text-slate-900 transition text-left">
-                  Projects
+                  Components
                 </button>
                 <div className="flex flex-col gap-3 pt-2 border-t border-white/20">
                   {!user ? (
@@ -733,10 +733,10 @@ const API = import.meta.env.VITE_API_URL;
                     <div key={idx} className="border-b border-slate-200 pb-4 last:border-0">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                          {review.user?.[0]?.toUpperCase() || "U"}
+                          {review.name?.[0]?.toUpperCase() || "U"}
                         </div>
                         <div>
-                          <p className="font-semibold text-slate-900">{review.user}</p>
+                          <p className="font-semibold text-slate-900">{review.name}</p>
                           <p className="text-sm text-slate-500">{review.date}</p>
                         </div>
                       </div>

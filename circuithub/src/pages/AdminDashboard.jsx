@@ -541,7 +541,7 @@ const AdminDashboard = () => {
                     <tr key={p._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
                       <td className="p-3 text-slate-700">{p.name}</td>
                       <td className="p-3 text-slate-600">{p.category}</td>
-                      <td className="p-3 text-slate-900">${p.price}</td>
+                      <td className="p-3 text-slate-900">₹{p.price}</td>
                       <td className="p-3">
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           p.stock > 10 
@@ -674,7 +674,7 @@ const AdminDashboard = () => {
     </td>
 
     <td className="p-3 text-slate-900">
-      ${order.totalAmount?.toFixed(2) || "0.00"}
+      ₹{order.totalAmount?.toFixed(2) || "0.00"}
     </td>
 
     <td className="p-3">

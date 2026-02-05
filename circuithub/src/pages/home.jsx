@@ -1309,7 +1309,7 @@ function Navbar({
               className="text-black hover:text-white transition-all duration-300 px-4 py-2 rounded-lg hover:bg-white/10"
               onClick={() => navigate("/products")}
             >
-              Products
+              Components
             </button>
             <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/20">
               {/* <Button

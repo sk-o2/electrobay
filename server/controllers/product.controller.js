@@ -153,7 +153,7 @@ export const addReview = async (req, res) => {
     return res.status(404).json({ success: false, message: "Product not found" });
 
   product.reviews.push({
-    user: req.user.email || req.user.name,
+    user: req.user.name || "User",
     comment,
   });
 

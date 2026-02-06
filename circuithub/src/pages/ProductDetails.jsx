@@ -38,7 +38,7 @@ const API = import.meta.env.VITE_API_URL;
 
         if (user) {
           try {
-            const cartRes = await axios.get("http://localhost:5000/api/cart", { withCredentials: true });
+            const cartRes = await axios.get(`${API}/api/cart`, { withCredentials: true });
             setCartCount(cartRes.data.items?.length || 0);
           } catch (err) {
             console.debug("Cart fetch failed:", err?.message ?? err);
@@ -49,7 +49,7 @@ const API = import.meta.env.VITE_API_URL;
 
         const fetchSimilar = async () => {
           try {
-            const s = await axios.get(`http://localhost:5000/api/products/${id}/similar`);
+            const s = await axios.get(`${API}/api/products/${id}/similar`);
             const list = Array.isArray(s.data) ? s.data : s.data?.products ?? [];
             if (list.length) {
               setSimilar(list.slice(0, 12));
@@ -62,7 +62,7 @@ const API = import.meta.env.VITE_API_URL;
           try {
             if (prod?.brand) {
               const byBrand = await axios.get(
-                `http://localhost:5000/api/products?brand=${encodeURIComponent(prod.brand)}&limit=12`
+                `${API}/api/products?brand=${encodeURIComponent(prod.brand)}&limit=12`
               );
               const list = byBrand.data?.products ?? byBrand.data ?? [];
               const filtered = (Array.isArray(list) ? list : []).filter((p) => getId(p) !== getId(prod));
@@ -80,7 +80,7 @@ const API = import.meta.env.VITE_API_URL;
 
         const fetchRelated = async () => {
           try {
-            const r = await axios.get(`http://localhost:5000/api/products/${id}/related`);
+            const r = await axios.get(`${API}/api/products/${id}/related`);
             const list = Array.isArray(r.data) ? r.data : r.data?.products ?? [];
             if (list.length) {
               setRelated(list.slice(0, 12));
@@ -93,7 +93,7 @@ const API = import.meta.env.VITE_API_URL;
           try {
             if (prod?.category) {
               const byCat = await axios.get(
-                `http://localhost:5000/api/products?category=${encodeURIComponent(prod.category)}&limit=12`
+                `${API}/api/products?category=${encodeURIComponent(prod.category)}&limit=12`
               );
               const list = byCat.data?.products ?? byCat.data ?? [];
               const filtered = (Array.isArray(list) ? list : []).filter((p) => getId(p) !== getId(prod));
@@ -107,7 +107,7 @@ const API = import.meta.env.VITE_API_URL;
           }
 
           try {
-            const allRes = await axios.get("http://localhost:5000/api/products?limit=50");
+            const allRes = await axios.get(`${API}/api/products?limit=50`);
             const list = allRes.data?.products ?? allRes.data ?? [];
             if (Array.isArray(list) && list.length) {
               const myPrice = Number(prod?.price || 0);
@@ -159,7 +159,7 @@ const API = import.meta.env.VITE_API_URL;
     }
     try {
       await axios.post(
-        "http://localhost:5000/api/cart/add",
+        `${API}/api/cart/add`,
         { productId: id, quantity: qty },
         { withCredentials: true }
       );
@@ -192,7 +192,7 @@ const API = import.meta.env.VITE_API_URL;
     }
     try {
       await axios.post(
-        `http://localhost:5000/api/products/${id}/reviews`,
+        `${API}/api/products/${id}/reviews`,
         { comment: newReview },
         { withCredentials: true }
       );
@@ -701,7 +701,7 @@ const API = import.meta.env.VITE_API_URL;
                         e.stopPropagation();
                         if (!user) navigate("/auth");
                         else {
-                          axios.post("http://localhost:5000/api/cart/add", { productId: rId, quantity: 1 }, { withCredentials: true })
+                          axios.post(`${API}/api/cart/add`, { productId: rId, quantity: 1 }, { withCredentials: true })
                             .then(() => setCartCount((c) => c + 1))
                             .catch((err) => console.debug("Related add failed:", err?.message ?? err));
                         }
@@ -733,10 +733,10 @@ const API = import.meta.env.VITE_API_URL;
                     <div key={idx} className="border-b border-slate-200 pb-4 last:border-0">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                          {review.name?.[0]?.toUpperCase() || "U"}
+                          {review.user?.[0]?.toUpperCase() || "U"}
                         </div>
                         <div>
-                          <p className="font-semibold text-slate-900">{review.name}</p>
+                          <p className="font-semibold text-slate-900">{review.user}</p>
                           <p className="text-sm text-slate-500">{review.date}</p>
                         </div>
                       </div>

@@ -16,6 +16,35 @@ router.get("/profile", protect, getProfile);
 // router.get("/profile", protect, (req, res) => {
 //   res.json({ user: req.user });
 // });
+// /api/auth/refresh
+router.post("/refresh", (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token" });
+  }
+
+  try {
+    const payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+
+    const newAccessToken = jwt.sign(
+      { userId: payload.userId },
+      process.env.ACCESS_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.json({ success: true });
+  } catch {
+    return res.status(401).json({ message: "Invalid refresh token" });
+  }
+});
+
 
 export default router;
 

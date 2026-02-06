@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       // ignore errors, still clear client state
     } finally {
-      setUser(null);
+      // setUser(null);
     }
   };
 

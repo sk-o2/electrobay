@@ -48,22 +48,63 @@ const api = axios.create({
   },
 });
 
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     const status = error.response?.status;
+//     const url = error.config?.url || "";
+
+//     const isAuthRoute =
+//       url.includes("/auth/login") ||
+//       url.includes("/auth/register") ||
+//       url.includes("/auth/signup");
+
+//     if (status === 401 && !isAuthRoute) {
+//       window.location.href = "/auth";
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
+let isRefreshing = false;
+let queue = [];
+
+const processQueue = () => {
+  queue.forEach(cb => cb());
+  queue = [];
+};
+
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const status = error.response?.status;
-    const url = error.config?.url || "";
+  res => res,
+  async err => {
+    const originalRequest = err.config;
 
-    const isAuthRoute =
-      url.includes("/auth/login") ||
-      url.includes("/auth/register") ||
-      url.includes("/auth/signup");
+    if (
+      err.response?.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
 
-    if (status === 401 && !isAuthRoute &&  window.location.pathname !== "/auth") {
-      window.location.href = "/auth";
+      if (isRefreshing) {
+        return new Promise(resolve => {
+          queue.push(() => resolve(api(originalRequest)));
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        await api.post("/api/auth/refresh");
+        isRefreshing = false;
+        processQueue();
+        return api(originalRequest);
+      } catch {
+        isRefreshing = false;
+        window.location.href = "/auth";
+      }
     }
 
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 

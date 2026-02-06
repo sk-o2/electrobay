@@ -23,7 +23,7 @@ const app = express();
 
 
 /* -------------------- MIDDLEWARES -------------------- */
-
+app.set("trust proxy", 1);
 // Parse JSON body
 app.use(express.json());
 

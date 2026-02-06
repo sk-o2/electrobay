@@ -121,10 +121,10 @@
 //   }
 // };
 
-
+import dotenv from "dotenv";
 import { Resend } from "resend";
 import { verifyEmailTemplate, resetPasswordTemplate } from "./emailTemplates.js";
-
+dotenv.config();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendMail = async ({ to, subject, html }) => {

@@ -37,7 +37,7 @@
 // export default api;
 
 
-// src/api/api.js
+// src/utils/api.js
 import axios from "axios";
 
 const api = axios.create({
@@ -59,7 +59,7 @@ api.interceptors.response.use(
       url.includes("/auth/register") ||
       url.includes("/auth/signup");
 
-    if (status === 401 && !isAuthRoute) {
+    if (status === 401 && !isAuthRoute &&  window.location.pathname !== "/auth") {
       window.location.href = "/auth";
     }
 

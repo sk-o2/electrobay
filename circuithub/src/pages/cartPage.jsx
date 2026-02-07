@@ -382,7 +382,7 @@ export default function CartPage() {
                             <div className="text-right">
                               <div className="text-sm text-slate-500">Unit Price: ${price.toFixed(2)}</div>
                               <div className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                ${itemTotal.toFixed(2)}
+                                ₹{itemTotal.toFixed(2)}
                               </div>
                             </div>
                           </div>
@@ -401,12 +401,12 @@ export default function CartPage() {
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between text-slate-600">
                       <span>Subtotal ({cartItems.length} items)</span>
-                      <span className="font-medium">${totalPrice.toFixed(2)}</span>
+                      <span className="font-medium">₹{totalPrice.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex justify-between text-green-600">
                       <span>Discount (10%)</span>
-                      <span className="font-medium">- ${discount.toFixed(2)}</span>
+                      <span className="font-medium">- ₹{discount.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex justify-between text-slate-600">
@@ -418,7 +418,7 @@ export default function CartPage() {
                       <div className="flex justify-between text-lg font-bold text-slate-900">
                         <span>Total</span>
                         <span className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                          ${finalTotal.toFixed(2)}
+                          ₹{finalTotal.toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -426,7 +426,7 @@ export default function CartPage() {
 
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                     <p className="text-green-700 text-sm font-medium">
-                      🎉 You're saving ${discount.toFixed(2)} on this order!
+                      🎉 You're saving ₹{discount.toFixed(2)} on this order!
                     </p>
                   </div>
 

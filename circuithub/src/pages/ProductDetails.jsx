@@ -736,7 +736,7 @@ const API = import.meta.env.VITE_API_URL;
                           {review.user?.[0]?.toUpperCase() || "U"}
                         </div>
                         <div>
-                          <p className="font-semibold text-slate-900">{review.user}</p>
+                          <p className="font-semibold text-slate-900">{review.user?.name || "User"}</p>
                           <p className="text-sm text-slate-500">{review.date}</p>
                         </div>
                       </div>

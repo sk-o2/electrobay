@@ -1455,7 +1455,7 @@ function Navbar({
               ) : (
                 <button
                   onClick={() => navigate("/profile")}
-                  className="flex items-center gap-2 text-slate-700 hover:text-slate-900 transition"
+                  className="text-white/90 hover:text-white transition-all duration-300 text-left px-4 py-3 rounded-lg hover:bg-white/10"
                 >
                   <User className="w-4 h-4" />
                   <span>{user.name}</span>

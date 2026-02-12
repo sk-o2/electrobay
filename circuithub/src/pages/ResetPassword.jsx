@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ShoppingCart, Menu, Lock, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
-
+import electro from "../assets/electro.png";
 const API_BASE = import.meta.env.VITE_API_URL || "";
 
 function useQuery() {

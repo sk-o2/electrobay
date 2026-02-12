@@ -322,7 +322,7 @@ export default function CartPage() {
                          
                           <img
                             
-                            src={item.product.images?.[0] || item.product.image}
+                            src={item.product.images?.[0] || item.product?.image}
                             alt={item.product.name}
                             className="max-h-full object-contain p-2 hover:scale-110 transition-transform duration-300"
                             onError={(e) => { 

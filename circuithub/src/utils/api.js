@@ -101,6 +101,7 @@ api.interceptors.response.use(
       } catch {
         isRefreshing = false;
         window.location.href = "/auth";
+        console.log(" error hai bhai");
       }
     }
 

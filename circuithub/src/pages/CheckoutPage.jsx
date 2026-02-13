@@ -603,7 +603,7 @@ const CheckoutPage = () => {
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <p className="text-sm text-blue-700 text-center">
-                  Your order will be confirmed and processed immediately
+                  Your order will be confirmed and processed immediately & we'll contact you within 12 hours
                 </p>
               </div>
 

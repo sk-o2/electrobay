@@ -5,7 +5,16 @@ import Product from "../models/Product.js";
 export const getCart = async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id })
     .populate("items.product");
+  if (!cart) return res.json({ items: [] });
 
+  // Remove items where product no longer exists
+  const validItems = cart.items.filter(item => item.product !== null);
+
+  // If something was removed, save updated cart
+  if (validItems.length !== cart.items.length) {
+    cart.items = validItems;
+    await cart.save();
+  }
   res.json({
     cart: cart || { items: [] },
   });

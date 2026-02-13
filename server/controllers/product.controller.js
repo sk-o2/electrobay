@@ -132,7 +132,7 @@ export const getRelatedProducts = async (req, res) => {
   const products = await Product.find({
     category: product.category,
     _id: { $ne: product._id },
-  }).limit(12);
+  }).limit(6);
 
   res.json(products); // ✅ ARRAY
 };

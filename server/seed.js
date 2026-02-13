@@ -84,7 +84,7 @@ mongoose.connect(process.env.MONGO_URI, {
 const products = [
   {
     name: "Arduino Uno",
-    category: "Microcontrollers",
+    category: "Microcontroller",
     price: 999,
     images: [
       "https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg",
@@ -97,7 +97,7 @@ const products = [
   },
   {
     name: "ESP32 Development Board",
-    category: "Microcontrollers",
+    category: "Microcontroller",
     price: 1250,
     images: [
       "https://upload.wikimedia.org/wikipedia/commons/d/dc/ESP32.jpg",

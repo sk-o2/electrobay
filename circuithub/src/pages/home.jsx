@@ -1618,7 +1618,7 @@ function CategoriesSection() {
   const categories = [
     {
       id: 1,
-      name: "Microcontrollers",
+      name: "Microcontroller",
       image:
         "https://images.unsplash.com/photo-1677480409111-88694019301c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       color: "from-blue-500 to-cyan-500",
@@ -2520,7 +2520,7 @@ function Footer() {
                   className="text-white/70 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                 >
                   <span className="w-1 h-1 rounded-full bg-purple-500 group-hover:w-2 transition-all duration-300" />
-                  Microcontrollers
+                  Microcontroller
                 </a>
               </li>
               <li>

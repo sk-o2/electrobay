@@ -30,7 +30,7 @@ const [searchParams] = useSearchParams();
 const categoryFromURL = searchParams.get("category");
 
   const categories = [
-    "Microcontrollers",
+    "Microcontroller",
     "Sensors",
     "Modules & Shields",
     "Actuators & Motors",

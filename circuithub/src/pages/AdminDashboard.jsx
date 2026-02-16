@@ -262,6 +262,19 @@ const AdminDashboard = () => {
     sku: "",
     tags: [],
   });
+   const categories = [
+    "Microcontroller",
+    "Sensors",
+    "Modules & Shields",
+    "Actuators & Motors",
+    "Power & Batteries",
+    "Cables & Connectors",
+    "Prototyping & Accessories",
+    "Tools & Equipment",
+    "Projects",
+    "Kits",
+  ];
+
 
   // const parseProductsResponse = (res) => {
   //   if (!res) return [];
@@ -463,11 +476,26 @@ const AdminDashboard = () => {
                 value={newProduct.name}
                 onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
               />
-              <Input
+              {/* <Input
                 placeholder="Category"
                 value={newProduct.category}
                 onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-              />
+              /> */}
+              <select
+  value={newProduct.category}
+  onChange={(e) =>
+    setNewProduct({ ...newProduct, category: e.target.value })
+  }
+  className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+>
+  <option value="">Select Category</option>
+  {categories.map((cat) => (
+    <option key={cat} value={cat}>
+      {cat}
+    </option>
+  ))}
+</select>
+
               <Input
                 placeholder="Price"
                 type="number"

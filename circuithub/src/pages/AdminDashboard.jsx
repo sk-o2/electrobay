@@ -268,7 +268,8 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 axios.defaults.baseURL = API_BASE;
 axios.defaults.withCredentials = true; // critical for cookie-based auth
 axios.defaults.headers.common["Content-Type"] = "application/json";
-
+const [editingProductId, setEditingProductId] = useState(null);
+const [editData, setEditData] = useState({});
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -451,6 +452,18 @@ const AdminDashboard = () => {
     "Projects",
     "Kits",
   ];
+  const updateProduct = async (id) => {
+  try {
+    await axios.put(`/api/products/${id}`, editData);
+    setEditingProductId(null);
+    setEditData({});
+    fetchProducts();
+  } catch (err) {
+    console.error("updateProduct error:", err);
+    alert("Failed to update product");
+  }
+};
+
 
   // Order Stats
   const totalOrders = Array.isArray(orders) ? orders.length : 0;
@@ -626,7 +639,7 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(products) &&
+                  {/* {Array.isArray(products) &&
                     products.map((p) => (
                       <tr
                         key={p._id}
@@ -679,7 +692,123 @@ const AdminDashboard = () => {
                         No products found
                       </td>
                     </tr>
-                  )}
+                  )} */}
+                  {Array.isArray(products) && products.map((p) => (
+  <tr key={p._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
+    
+    {/* NAME */}
+    <td className="p-3">
+      {editingProductId === p._id ? (
+        <input
+          value={editData.name}
+          onChange={(e) =>
+            setEditData({ ...editData, name: e.target.value })
+          }
+          className="border px-2 py-1 rounded w-full"
+        />
+      ) : (
+        p.name
+      )}
+    </td>
+
+    {/* CATEGORY */}
+    <td className="p-3">
+      {editingProductId === p._id ? (
+        <select
+          value={editData.category}
+          onChange={(e) =>
+            setEditData({ ...editData, category: e.target.value })
+          }
+          className="border px-2 py-1 rounded w-full"
+        >
+          {categories.map((cat) => (
+            <option key={cat}>{cat}</option>
+          ))}
+        </select>
+      ) : (
+        p.category
+      )}
+    </td>
+
+    {/* PRICE */}
+    <td className="p-3">
+      {editingProductId === p._id ? (
+        <input
+          type="number"
+          value={editData.price}
+          onChange={(e) =>
+            setEditData({ ...editData, price: e.target.value })
+          }
+          className="border px-2 py-1 rounded w-full"
+        />
+      ) : (
+        `₹${p.price}`
+      )}
+    </td>
+
+    {/* STOCK */}
+    <td className="p-3">
+      {editingProductId === p._id ? (
+        <input
+          type="number"
+          value={editData.stock}
+          onChange={(e) =>
+            setEditData({ ...editData, stock: e.target.value })
+          }
+          className="border px-2 py-1 rounded w-full"
+        />
+      ) : (
+        p.stock
+      )}
+    </td>
+
+    {/* ACTIONS */}
+    <td className="p-3">
+      <div className="flex gap-2">
+        {editingProductId === p._id ? (
+          <>
+            <Button
+              size="xs"
+              variant="success"
+              onClick={() => updateProduct(p._id)}
+            >
+              Save
+            </Button>
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => setEditingProductId(null)}
+            >
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => {
+                setEditingProductId(p._id);
+                setEditData(p);
+              }}
+            >
+              <Edit className="w-3 h-3" />
+            </Button>
+
+            <Button
+              onClick={() => deleteProduct(p._id)}
+              variant="danger"
+              size="xs"
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </>
+        )}
+      </div>
+    </td>
+  </tr>
+))}
+
                 </tbody>
               </table>
             </div>

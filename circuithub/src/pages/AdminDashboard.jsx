@@ -268,8 +268,7 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 axios.defaults.baseURL = API_BASE;
 axios.defaults.withCredentials = true; // critical for cookie-based auth
 axios.defaults.headers.common["Content-Type"] = "application/json";
-const [editingProductId, setEditingProductId] = useState(null);
-const [editData, setEditData] = useState({});
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -452,6 +451,8 @@ const AdminDashboard = () => {
     "Projects",
     "Kits",
   ];
+  const [editingProductId, setEditingProductId] = useState(null);
+const [editData, setEditData] = useState({});
   const updateProduct = async (id) => {
   try {
     await axios.put(`/api/products/${id}`, editData);

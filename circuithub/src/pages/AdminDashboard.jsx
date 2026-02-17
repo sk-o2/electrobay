@@ -639,60 +639,7 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {Array.isArray(products) &&
-                    products.map((p) => (
-                      <tr
-                        key={p._id}
-                        className="border-b border-slate-100 hover:bg-slate-50 transition"
-                      >
-                        <td className="p-3 text-slate-700">{p.name}</td>
-                        <td className="p-3 text-slate-600">{p.category}</td>
-                        <td className="p-3 text-slate-900">₹{p.price}</td>
-                        <td className="p-3">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs ${
-                              p.stock > 10
-                                ? "bg-green-100 text-green-700"
-                                : p.stock > 0
-                                  ? "bg-yellow-100 text-yellow-700"
-                                  : "bg-red-100 text-red-700"
-                            }`}
-                          >
-                            {p.stock}
-                          </span>
-                        </td>
-                        <td className="p-3">
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() =>
-                                updateProductStock(p._id, (p.stock || 0) + 1)
-                              }
-                              variant="outline"
-                              size="xs"
-                            >
-                              +1
-                            </Button>
-                            <Button
-                              onClick={() => deleteProduct(p._id)}
-                              variant="danger"
-                              size="xs"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  {(!Array.isArray(products) || products.length === 0) && (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="p-8 text-center text-slate-500"
-                      >
-                        No products found
-                      </td>
-                    </tr>
-                  )} */}
+                  
                   {Array.isArray(products) && products.map((p) => (
   <tr key={p._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
     

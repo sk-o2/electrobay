@@ -1,46 +1,52 @@
-
-
 // src/pages/AdminDashboard.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { 
-  ShoppingCart, 
-  Menu, 
-  Package, 
-  TrendingUp, 
-  CheckCircle, 
-  Clock, 
-  Plus, 
-  Trash2, 
+import {
+  ShoppingCart,
+  Menu,
+  Package,
+  TrendingUp,
+  CheckCircle,
+  Clock,
+  Plus,
+  Trash2,
   Edit,
-  LogOut
+  LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
-
-
 // ============= UI COMPONENTS =============
 
-function Button({ children, variant = "default", size = "default", className = "", onClick, type = "button", disabled = false }) {
-  const baseStyles = "inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
-  
+function Button({
+  children,
+  variant = "default",
+  size = "default",
+  className = "",
+  onClick,
+  type = "button",
+  disabled = false,
+}) {
+  const baseStyles =
+    "inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+
   const variants = {
     default: "bg-slate-900 text-white hover:bg-slate-800",
-    gradient: "bg-gradient-to-br from-blue-500 to-purple-600 text-white hover:shadow-lg",
-    outline: "border border-slate-300 bg-transparent hover:bg-slate-100 text-slate-700",
+    gradient:
+      "bg-gradient-to-br from-blue-500 to-purple-600 text-white hover:shadow-lg",
+    outline:
+      "border border-slate-300 bg-transparent hover:bg-slate-100 text-slate-700",
     ghost: "hover:bg-slate-100 text-slate-700",
     danger: "bg-red-600 text-white hover:bg-red-700",
     warning: "bg-yellow-500 text-white hover:bg-yellow-600",
     success: "bg-green-600 text-white hover:bg-green-700",
   };
-  
+
   const sizes = {
     default: "h-10 px-4 py-2",
     sm: "h-9 px-3 text-sm",
     xs: "h-8 px-2 text-xs",
   };
-  
+
   return (
     <button
       type={type}
@@ -53,7 +59,15 @@ function Button({ children, variant = "default", size = "default", className = "
   );
 }
 
-function Input({ id, type = "text", placeholder, value, onChange, className = "", disabled = false }) {
+function Input({
+  id,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  className = "",
+  disabled = false,
+}) {
   return (
     <input
       id={id}
@@ -69,7 +83,9 @@ function Input({ id, type = "text", placeholder, value, onChange, className = ""
 
 function Card({ children, className = "" }) {
   return (
-    <div className={`rounded-lg border border-slate-200 bg-white shadow-sm ${className}`}>
+    <div
+      className={`rounded-lg border border-slate-200 bg-white shadow-sm ${className}`}
+    >
       {children}
     </div>
   );
@@ -85,7 +101,7 @@ function Navbar({ onLogout }) {
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/10 border-b border-white/20">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div 
+          <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => navigate("/")}
           >
@@ -96,23 +112,19 @@ function Navbar({ onLogout }) {
           </div>
 
           <div className="hidden md:flex items-center gap-8">
-            <button 
+            <button
               onClick={() => navigate("/")}
               className="text-slate-700 hover:text-slate-900 transition"
             >
               Home
             </button>
-            <button 
+            <button
               onClick={() => navigate("/products")}
               className="text-slate-700 hover:text-slate-900 transition"
             >
               Products
             </button>
-            <Button
-              variant="warning"
-              size="sm"
-              onClick={onLogout}
-            >
+            <Button variant="warning" size="sm" onClick={onLogout}>
               <LogOut className="w-4 h-4 mr-2" />
               Logout
             </Button>
@@ -131,13 +143,13 @@ function Navbar({ onLogout }) {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-200">
             <div className="flex flex-col space-y-4">
-              <button 
+              <button
                 onClick={() => navigate("/")}
                 className="text-slate-700 hover:text-slate-900 transition text-left"
               >
                 Home
               </button>
-              <button 
+              <button
                 onClick={() => navigate("/products")}
                 className="text-slate-700 hover:text-slate-900 transition text-left"
               >
@@ -183,17 +195,26 @@ function Footer() {
             <h4 className="mb-4 text-white">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="text-white/70 hover:text-white transition">
+                <a
+                  href="/"
+                  className="text-white/70 hover:text-white transition"
+                >
                   Home
                 </a>
               </li>
               <li>
-                <a href="/products" className="text-white/70 hover:text-white transition">
+                <a
+                  href="/products"
+                  className="text-white/70 hover:text-white transition"
+                >
                   Products
                 </a>
               </li>
               <li>
-                <a href="#" className="text-white/70 hover:text-white transition">
+                <a
+                  href="#"
+                  className="text-white/70 hover:text-white transition"
+                >
                   Support
                 </a>
               </li>
@@ -230,7 +251,9 @@ function StatCard({ title, value, icon: Icon, color = "blue" }) {
           <p className="text-slate-600 text-sm mb-1">{title}</p>
           <p className="text-slate-900 text-3xl">{value}</p>
         </div>
-        <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${colorClasses[color]} flex items-center justify-center`}>
+        <div
+          className={`w-12 h-12 rounded-lg bg-gradient-to-br ${colorClasses[color]} flex items-center justify-center`}
+        >
           <Icon className="w-6 h-6 text-white" />
         </div>
       </div>
@@ -239,7 +262,6 @@ function StatCard({ title, value, icon: Icon, color = "blue" }) {
 }
 
 // ============= MAIN COMPONENT =============
-
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -262,8 +284,6 @@ const AdminDashboard = () => {
     sku: "",
     tags: [],
   });
-   
-
 
   // const parseProductsResponse = (res) => {
   //   if (!res) return [];
@@ -273,14 +293,13 @@ const AdminDashboard = () => {
   //   return [];
   // };
   const parseProductsResponse = (res) => {
-  if (!res) return [];
-  if (Array.isArray(res)) return res;
-  if (Array.isArray(res.products)) return res.products;
-  if (Array.isArray(res.data)) return res.data;
-  if (Array.isArray(res.data?.products)) return res.data.products;
-  return [];
-};
-
+    if (!res) return [];
+    if (Array.isArray(res)) return res;
+    if (Array.isArray(res.products)) return res.products;
+    if (Array.isArray(res.data)) return res.data;
+    if (Array.isArray(res.data?.products)) return res.data.products;
+    return [];
+  };
 
   const parseOrdersResponse = (res) => {
     if (!res) return [];
@@ -315,17 +334,17 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-    try {
-      await axios.get("/api/admin/check");
-      fetchProducts();
-      fetchOrders();
-    } catch (err) {
-      console.error("Admin check failed", err);
-      navigate("/auth");
-    }
-  };
+      try {
+        await axios.get("/api/admin/check");
+        fetchProducts();
+        fetchOrders();
+      } catch (err) {
+        console.error("Admin check failed", err);
+        navigate("/auth");
+      }
+    };
 
-  checkAdmin();
+    checkAdmin();
   }, []);
 
   const addProduct = async () => {
@@ -336,13 +355,25 @@ const AdminDashboard = () => {
         stock: Number(newProduct.stock) || 0,
         images: Array.isArray(newProduct.images)
           ? newProduct.images
-          : (newProduct.images || "").toString().split(",").map(s => s.trim()).filter(Boolean),
+          : (newProduct.images || "")
+              .toString()
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
         specifications: Array.isArray(newProduct.specifications)
           ? newProduct.specifications
-          : (newProduct.specifications || "").toString().split(",").map(s => s.trim()).filter(Boolean),
+          : (newProduct.specifications || "")
+              .toString()
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
         tags: Array.isArray(newProduct.tags)
           ? newProduct.tags
-          : (newProduct.tags || "").toString().split(",").map(s => s.trim()).filter(Boolean),
+          : (newProduct.tags || "")
+              .toString()
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
       };
 
       await axios.post("/api/products", payload);
@@ -400,15 +431,15 @@ const AdminDashboard = () => {
   //   navigate("/");
   // };
   const handleLogout = async () => {
-  try {
-    await axios.post("/api/auth/logout"); // clears cookies on server
-  } catch (err) {
-    console.error("Logout error:", err);
-  } finally {
-    navigate("/"); // redirect no matter what
-  }
-};
-const categories = [
+    try {
+      await axios.post("/api/auth/logout"); // clears cookies on server
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      navigate("/"); // redirect no matter what
+    }
+  };
+  const categories = [
     "Microcontroller",
     "Sensors",
     "Modules & Shields",
@@ -421,11 +452,14 @@ const categories = [
     "Kits",
   ];
 
-
   // Order Stats
   const totalOrders = Array.isArray(orders) ? orders.length : 0;
-  const pendingOrders = Array.isArray(orders) ? orders.filter((o) => o.status === "Pending").length : 0;
-  const fulfilledOrders = Array.isArray(orders) ? orders.filter((o) => o.status === "Fulfilled").length : 0;
+  const pendingOrders = Array.isArray(orders)
+    ? orders.filter((o) => o.status === "Pending").length
+    : 0;
+  const fulfilledOrders = Array.isArray(orders)
+    ? orders.filter((o) => o.status === "Fulfilled").length
+    : 0;
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -437,7 +471,9 @@ const categories = [
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-slate-900 mb-2">Admin Dashboard</h1>
-            <p className="text-slate-600">Manage products, orders, and inventory</p>
+            <p className="text-slate-600">
+              Manage products, orders, and inventory
+            </p>
           </div>
 
           {/* Stats Grid */}
@@ -475,77 +511,101 @@ const categories = [
               <Input
                 placeholder="Product Name"
                 value={newProduct.name}
-                onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, name: e.target.value })
+                }
               />
-              {/* <Input
-                placeholder="Category"
-                value={newProduct.category}
-                onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-              /> */}
+
               <select
-  value={newProduct.category}
-  onChange={(e) =>
-    setNewProduct({ ...newProduct, category: e.target.value })
-  }
-  className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
->
-  <option value="">Select Category</option>
-  {categories.map((cat) => (
-    <option key={cat} value={cat}>
-      {cat}
-    </option>
-  ))}
-</select>
+                value={newProduct.category}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, category: e.target.value })
+                }
+                className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
 
               <Input
                 placeholder="Price"
                 type="number"
                 value={newProduct.price}
-                onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, price: e.target.value })
+                }
               />
               <Input
                 placeholder="Stock"
                 type="number"
                 value={newProduct.stock}
-                onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, stock: e.target.value })
+                }
               />
               <Input
                 placeholder="SKU"
                 value={newProduct.sku}
-                onChange={(e) => setNewProduct({ ...newProduct, sku: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, sku: e.target.value })
+                }
               />
               <Input
                 placeholder="Images (comma separated URLs)"
-                value={Array.isArray(newProduct.images) ? newProduct.images.join(",") : newProduct.images}
-                onChange={(e) => setNewProduct({ ...newProduct, images: e.target.value })}
+                value={
+                  Array.isArray(newProduct.images)
+                    ? newProduct.images.join(",")
+                    : newProduct.images
+                }
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, images: e.target.value })
+                }
               />
               <Input
                 placeholder="Specifications (comma separated)"
-                value={Array.isArray(newProduct.specifications) ? newProduct.specifications.join(",") : newProduct.specifications}
-                onChange={(e) => setNewProduct({ ...newProduct, specifications: e.target.value })}
+                value={
+                  Array.isArray(newProduct.specifications)
+                    ? newProduct.specifications.join(",")
+                    : newProduct.specifications
+                }
+                onChange={(e) =>
+                  setNewProduct({
+                    ...newProduct,
+                    specifications: e.target.value,
+                  })
+                }
               />
               <Input
                 placeholder="Tags (comma separated)"
-                value={Array.isArray(newProduct.tags) ? newProduct.tags.join(",") : newProduct.tags}
-                onChange={(e) => setNewProduct({ ...newProduct, tags: e.target.value })}
+                value={
+                  Array.isArray(newProduct.tags)
+                    ? newProduct.tags.join(",")
+                    : newProduct.tags
+                }
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, tags: e.target.value })
+                }
               />
               <Input
                 placeholder="Description"
                 value={newProduct.description}
-                onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, description: e.target.value })
+                }
               />
             </div>
 
-            <Button
-              onClick={addProduct}
-              variant="gradient"
-            >
+            <Button onClick={addProduct} variant="gradient">
               <Plus className="w-4 h-4 mr-2" />
               Add Product
             </Button>
           </Card>
-          
-          {/* Products Table */}  
+
+          {/* Products Table */}
           <Card className="p-6 mb-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -566,45 +626,56 @@ const categories = [
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(products) && products.map((p) => (
-                    <tr key={p._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
-                      <td className="p-3 text-slate-700">{p.name}</td>
-                      <td className="p-3 text-slate-600">{p.category}</td>
-                      <td className="p-3 text-slate-900">₹{p.price}</td>
-                      <td className="p-3">
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          p.stock > 10 
-                            ? "bg-green-100 text-green-700" 
-                            : p.stock > 0 
-                            ? "bg-yellow-100 text-yellow-700" 
-                            : "bg-red-100 text-red-700"
-                        }`}>
-                          {p.stock}
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={() => updateProductStock(p._id, (p.stock || 0) + 1)}
-                            variant="outline"
-                            size="xs"
+                  {Array.isArray(products) &&
+                    products.map((p) => (
+                      <tr
+                        key={p._id}
+                        className="border-b border-slate-100 hover:bg-slate-50 transition"
+                      >
+                        <td className="p-3 text-slate-700">{p.name}</td>
+                        <td className="p-3 text-slate-600">{p.category}</td>
+                        <td className="p-3 text-slate-900">₹{p.price}</td>
+                        <td className="p-3">
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs ${
+                              p.stock > 10
+                                ? "bg-green-100 text-green-700"
+                                : p.stock > 0
+                                  ? "bg-yellow-100 text-yellow-700"
+                                  : "bg-red-100 text-red-700"
+                            }`}
                           >
-                            +1
-                          </Button>
-                          <Button
-                            onClick={() => deleteProduct(p._id)}
-                            variant="danger"
-                            size="xs"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            {p.stock}
+                          </span>
+                        </td>
+                        <td className="p-3">
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() =>
+                                updateProductStock(p._id, (p.stock || 0) + 1)
+                              }
+                              variant="outline"
+                              size="xs"
+                            >
+                              +1
+                            </Button>
+                            <Button
+                              onClick={() => deleteProduct(p._id)}
+                              variant="danger"
+                              size="xs"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   {(!Array.isArray(products) || products.length === 0) && (
                     <tr>
-                      <td colSpan={5} className="p-8 text-center text-slate-500">
+                      <td
+                        colSpan={5}
+                        className="p-8 text-center text-slate-500"
+                      >
                         No products found
                       </td>
                     </tr>
@@ -684,55 +755,66 @@ const categories = [
                       </td>
                     </tr>
                   ))} */}
-                  {Array.isArray(orders) && orders.map((order) => (
-  <tr key={order._id} className="border-b border-slate-100 hover:bg-slate-50 transition">
-    <td className="p-3 text-slate-700 font-mono text-xs">
-      {order._id.substring(0, 8)}...
-    </td>
+                  {Array.isArray(orders) &&
+                    orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="border-b border-slate-100 hover:bg-slate-50 transition"
+                      >
+                        <td className="p-3 text-slate-700 font-mono text-xs">
+                          {order._id.substring(0, 8)}...
+                        </td>
 
-    <td className="p-3 text-slate-700">
-      {order.user?.name || order.customerName || "N/A"}
-    </td>
+                        <td className="p-3 text-slate-700">
+                          {order.user?.name || order.customerName || "N/A"}
+                        </td>
 
-    <td className="p-3 text-slate-600 text-sm">
-      {order.items?.map((p, idx) => (
-        <div key={idx}>
-          {p.product?.name || "Unknown"} x {p.quantity}
-        </div>
-      ))}
-    </td>
+                        <td className="p-3 text-slate-600 text-sm">
+                          {order.items?.map((p, idx) => (
+                            <div key={idx}>
+                              {p.product?.name || "Unknown"} x {p.quantity}
+                            </div>
+                          ))}
+                        </td>
 
-    <td className="p-3 text-slate-900">
-      ₹{order.totalAmount?.toFixed(2) || "0.00"}
-    </td>
+                        <td className="p-3 text-slate-900">
+                          ₹{order.totalAmount?.toFixed(2) || "0.00"}
+                        </td>
 
-    <td className="p-3">
-      <span className={`px-3 py-1 rounded-full text-xs ${
-        order.status === "Pending"
-          ? "bg-yellow-100 text-yellow-700"
-          : "bg-green-100 text-green-700"
-      }`}>
-        {order.status}
-      </span>
-    </td>
+                        <td className="p-3">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs ${
+                              order.status === "Pending"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-green-100 text-green-700"
+                            }`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
 
-    <td className="p-3">
-      {order.status === "Pending" && (
-        <Button
-          onClick={() => updateOrderStatus(order._id, "Fulfilled")}
-          variant="success"
-          size="xs"
-        >
-          Mark Fulfilled
-        </Button>
-      )}
-    </td>
-  </tr>
-))}
+                        <td className="p-3">
+                          {order.status === "Pending" && (
+                            <Button
+                              onClick={() =>
+                                updateOrderStatus(order._id, "Fulfilled")
+                              }
+                              variant="success"
+                              size="xs"
+                            >
+                              Mark Fulfilled
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
 
                   {(!Array.isArray(orders) || orders.length === 0) && (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-slate-500">
+                      <td
+                        colSpan={6}
+                        className="p-8 text-center text-slate-500"
+                      >
                         No orders found
                       </td>
                     </tr>
@@ -750,5 +832,3 @@ const categories = [
 };
 
 export default AdminDashboard;
-
-

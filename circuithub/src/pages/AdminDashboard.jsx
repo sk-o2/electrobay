@@ -262,18 +262,7 @@ const AdminDashboard = () => {
     sku: "",
     tags: [],
   });
-   const categories = [
-    "Microcontroller",
-    "Sensors",
-    "Modules & Shields",
-    "Actuators & Motors",
-    "Power & Batteries",
-    "Cables & Connectors",
-    "Prototyping & Accessories",
-    "Tools & Equipment",
-    "Projects",
-    "Kits",
-  ];
+   
 
 
   // const parseProductsResponse = (res) => {
@@ -419,6 +408,18 @@ const AdminDashboard = () => {
     navigate("/"); // redirect no matter what
   }
 };
+const categories = [
+    "Microcontroller",
+    "Sensors",
+    "Modules & Shields",
+    "Actuators & Motors",
+    "Power & Batteries",
+    "Cables & Connectors",
+    "Prototyping & Accessories",
+    "Tools & Equipment",
+    "Projects",
+    "Kits",
+  ];
 
 
   // Order Stats
@@ -751,238 +752,3 @@ const AdminDashboard = () => {
 export default AdminDashboard;
 
 
-
-
-// // src/pages/AdminDashboard.jsx
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import {
-//   ShoppingCart,
-//   Menu,
-//   Package,
-//   TrendingUp,
-//   CheckCircle,
-//   Clock,
-//   Plus,
-//   Trash2,
-//   LogOut,
-// } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
-
-// /* ================== AXIOS CONFIG ================== */
-// const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-// axios.defaults.baseURL = API_BASE;
-// axios.defaults.withCredentials = true;
-// axios.defaults.headers.common["Content-Type"] = "application/json";
-
-// /* ================== UI COMPONENTS ================== */
-
-// function Button({ children, variant = "default", size = "default", onClick }) {
-//   const variants = {
-//     default: "bg-slate-900 text-white hover:bg-slate-800",
-//     gradient: "bg-gradient-to-br from-blue-500 to-purple-600 text-white",
-//     danger: "bg-red-600 text-white hover:bg-red-700",
-//     outline: "border border-slate-300 hover:bg-slate-100",
-//   };
-
-//   const sizes = {
-//     default: "px-4 py-2",
-//     sm: "px-3 py-1 text-sm",
-//     xs: "px-2 py-1 text-xs",
-//   };
-
-//   return (
-//     <button
-//       onClick={onClick}
-//       className={`rounded ${variants[variant]} ${sizes[size]}`}
-//     >
-//       {children}
-//     </button>
-//   );
-// }
-
-// function Card({ children }) {
-//   return <div className="bg-white border rounded shadow-sm p-6">{children}</div>;
-// }
-
-// /* ================== MAIN ================== */
-
-// const AdminDashboard = () => {
-//   const navigate = useNavigate();
-
-//   const [products, setProducts] = useState([]);
-//   const [orders, setOrders] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   /* ================== AUTH CHECK ================== */
-//   const checkAdmin = async () => {
-//     try {
-//       const res = await axios.get("/api/auth/me");
-//       if (res.data.role !== "admin") {
-//         navigate("/");
-//       }
-//     } catch {
-//       navigate("/auth");
-//     }
-//   };
-
-//   /* ================== DATA ================== */
-//   // const fetchProducts = async () => {
-//   //   const res = await axios.get("/api/products");
-//   //   setProducts(res.data || []);
-//   // };
-
-//   const fetchProducts = async () => {
-//   const res = await axios.get("/api/admin/products", {
-//     withCredentials: true,
-//   });
-
-//   setProducts(res.data); // ✅ ALWAYS ARRAY
-// };
-
-//   const fetchOrders = async () => {
-//     const res = await axios.get("/api/orders");
-//     setOrders(res.data || []);
-//   };
-
-//   useEffect(() => {
-//     (async () => {
-//       await checkAdmin();
-//       await fetchProducts();
-//       await fetchOrders();
-//       setLoading(false);
-//     })();
-//   }, []);
-
-//   /* ================== ACTIONS ================== */
-//   const addProduct = async () => {
-//     await axios.post("/api/products", {
-//       name: "New Product",
-//       price: 100,
-//       stock: 10,
-//     });
-//     fetchProducts();
-//   };
-
-//   const deleteProduct = async (id) => {
-//     if (!confirm("Delete product?")) return;
-//     await axios.delete(`/api/products/${id}`);
-//     fetchProducts();
-//   };
-
-//   const updateOrderStatus = async (id) => {
-//     await axios.put(`/api/orders/${id}`, { status: "Fulfilled" });
-//     fetchOrders();
-//   };
-
-//   const logout = async () => {
-//     await axios.post("/api/auth/logout");
-//     navigate("/login");
-//   };
-
-//   if (loading) return <p className="p-10">Loading...</p>;
-
-//   /* ================== STATS ================== */
-//   const totalOrders = orders.length;
-//   const pendingOrders = orders.filter(o => o.status === "Pending").length;
-//   const fulfilledOrders = orders.filter(o => o.status === "Fulfilled").length;
-
-//   return (
-//     <div className="min-h-screen bg-slate-50">
-//       {/* NAV */}
-//       <nav className="flex justify-between items-center p-4 bg-white border-b">
-//         <h2 className="flex items-center gap-2">
-//           <ShoppingCart /> Admin Panel
-//         </h2>
-//         <Button variant="danger" size="sm" onClick={logout}>
-//           <LogOut className="inline w-4 h-4 mr-1" />
-//           Logout
-//         </Button>
-//       </nav>
-
-//       <div className="p-8 space-y-8">
-//         {/* STATS */}
-//         <div className="grid grid-cols-3 gap-6">
-//           <Card>📦 Total Orders: {totalOrders}</Card>
-//           <Card>⏳ Pending: {pendingOrders}</Card>
-//           <Card>✅ Fulfilled: {fulfilledOrders}</Card>
-//         </div>
-
-//         {/* PRODUCTS */}
-//         <Card>
-//           <div className="flex justify-between mb-4">
-//             <h3>Products</h3>
-//             <Button variant="gradient" onClick={addProduct}>
-//               <Plus className="w-4 h-4 mr-1 inline" /> Add
-//             </Button>
-//           </div>
-
-//           <table className="w-full">
-//             <thead>
-//               <tr className="border-b">
-//                 <th>Name</th>
-//                 <th>Price</th>
-//                 <th>Stock</th>
-//                 <th></th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {products.map(p => (
-//                 <tr key={p._id} className="border-b">
-//                   <td>{p.name}</td>
-//                   <td>${p.price}</td>
-//                   <td>{p.stock}</td>
-//                   <td>
-//                     <Button
-//                       variant="danger"
-//                       size="xs"
-//                       onClick={() => deleteProduct(p._id)}
-//                     >
-//                       <Trash2 className="w-3 h-3" />
-//                     </Button>
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </Card>
-
-//         {/* ORDERS */}
-//         <Card>
-//           <h3 className="mb-4">Orders</h3>
-//           <table className="w-full">
-//             <thead>
-//               <tr className="border-b">
-//                 <th>ID</th>
-//                 <th>Status</th>
-//                 <th></th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {orders.map(o => (
-//                 <tr key={o._id} className="border-b">
-//                   <td className="text-xs">{o._id.slice(0, 8)}...</td>
-//                   <td>{o.status}</td>
-//                   <td>
-//                     {o.status === "Pending" && (
-//                       <Button
-//                         size="xs"
-//                         variant="gradient"
-//                         onClick={() => updateOrderStatus(o._id)}
-//                       >
-//                         Fulfill
-//                       </Button>
-//                     )}
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </Card>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;

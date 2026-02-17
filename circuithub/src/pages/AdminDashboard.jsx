@@ -284,6 +284,8 @@ const AdminDashboard = () => {
     sku: "",
     tags: [],
   });
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [editData, setEditData] = useState({});
 
   // const parseProductsResponse = (res) => {
   //   if (!res) return [];
@@ -451,8 +453,7 @@ const AdminDashboard = () => {
     "Projects",
     "Kits",
   ];
-  const [editingProductId, setEditingProductId] = useState(null);
-const [editData, setEditData] = useState({});
+
   const updateProduct = async (id) => {
   try {
     await axios.put(`/api/products/${id}`, editData);

@@ -338,9 +338,9 @@ export default function Auth({ onAuthSuccess = () => {} }) {
                       <Input id="signup-password" type="password" placeholder="Password" value={suPassword} onChange={(e) => setSuPassword(e.target.value)} icon={Lock} required />
                       <Input id="signup-confirm" type="password" placeholder="Confirm Password" value={suConfirm} onChange={(e) => setSuConfirm(e.target.value)} icon={Lock} required />
                     </div>
-                    <Input id="signup-phone" type="tel" placeholder="Phone (optional)" value={suPhone} onChange={(e) => setSuPhone(e.target.value)} icon={Phone} />
+                    <Input id="signup-phone" type="tel" placeholder="Phone" value={suPhone} onChange={(e) => setSuPhone(e.target.value)} icon={Phone} />
                     <div className="pt-2">
-                      <div className="mb-3 text-slate-700">Shipping Address (optional)</div>
+                      <div className="mb-3 text-slate-700">Shipping Address</div>
                       <Input placeholder="Address line 1" value={suAddress.line1} onChange={(e) => setSuAddress({ ...suAddress, line1: e.target.value })} icon={MapPin} />
                       <div className="grid md:grid-cols-2 gap-3">
                         <Input placeholder="City" value={suAddress.city} onChange={(e) => setSuAddress({ ...suAddress, city: e.target.value })} />

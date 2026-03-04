@@ -1085,6 +1085,7 @@ import {
   TrendingUp,
   Award,
   X,
+  ShoppingBag,
 } from "lucide-react";
 import electro from "../assets/electro.png";
 import { Toaster, toast } from "sonner";
@@ -1270,7 +1271,7 @@ function Navbar({
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-all duration-300 group-hover:scale-110">
+            <div className=" w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-all duration-300 group-hover:scale-110 hidden md:flex">
               <ShoppingCart className="w-6 h-6 text-white" />
             </div>
             <img src={electro} alt="ElectroBay Logo" className="h-8 w-auto" />
@@ -1310,25 +1311,10 @@ function Navbar({
               className="text-black hover:text-white transition-all duration-300 px-4 py-2 rounded-lg hover:bg-white/10"
               onClick={() => navigate("/products")}
             >
-              Components
+              Shop 
             </button>
             <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/20">
-              {/* <Button
-                variant="ghost"
-                size="sm"
-                className="text-white/90 hover:text-white"
-                onClick={() => onAuthRedirect()}
-              >
-                Sign Up
-              </Button>
-              <Button
-                size="sm"
-                className="shadow-lg shadow-blue-500/30"
-                onClick={() => onAuthRedirect()}
-              >
-                <User className="w-4 h-4 mr-2" />
-                Login
-              </Button> */}
+              
               {!user ? (
                 <>
                   <button
@@ -1366,6 +1352,12 @@ function Navbar({
           >
             <Menu className="w-6 h-6" />
           </Button> */}
+          <button 
+                          onClick={() => navigate("/products")}
+                          className="relative block md:hidden ml-5"
+                        >
+                          <ShoppingBag size={24} className="text-slate-900" />
+                        </button>
           <button
             className="md:hidden text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -1376,6 +1368,7 @@ function Navbar({
               <Menu size={28} className="text-slate-900" />
             )}
           </button>
+          
         </div>
 
         {mobileMenuOpen && (
@@ -1413,7 +1406,7 @@ function Navbar({
                 className="text-white/90 hover:text-white transition-all duration-300 text-left px-4 py-3 rounded-lg hover:bg-white/10"
                 onClick={() => handleNavAndClose(onProjectsClick)}
               >
-                Components
+                Shop
               </button>
               {/* <div className="flex flex-col gap-3 pt-4 border-t border-white/20 mt-2">
                 <Button
@@ -1480,7 +1473,8 @@ function HeroBanner() {
           backgroundImage: `url('https://images.unsplash.com/photo-1761078739233-629de9252840?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5JTIwY2lyY3VpdCUyMGRhcmt8ZW58MXx8fHwxNzY1MDIzNzc5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral')`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/95 via-purple-600/90 to-slate-900/95" />
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-blue-600/95 via-purple-600/90 to-slate-900/95" /> */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-500/90 via-fuchsia-600/90 to-blue-500/90 " /> 
         <div className="absolute inset-0">
           <div className="absolute top-10 md:top-20 left-10 md:left-20 w-40 md:w-64 h-40 md:h-64 bg-blue-400/20 rounded-full blur-3xl animate-pulse" />
           <div

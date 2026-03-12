@@ -1,3 +1,80 @@
+// import express from "express";
+// import * as auth from "../controllers/auth.controller.js";
+// import { protect } from "../middlewares/auth.middleware.js";
+// import { getProfile } from "../controllers/user.controller.js";
+// import { setAuthCookies } from "../utils/token.js";
+// const router = express.Router();
+
+// router.post("/logout", protect, auth.logout);
+// router.get("/me", protect, auth.me);
+// router.post("/register", auth.register);
+// router.post("/login", auth.login);
+// router.post("/verify-email", auth.verifyEmail);
+// router.post("/forgot-password", auth.forgotPassword);
+// router.post("/reset-password/:token", auth.resetPassword);
+// router.get("/profile", protect, getProfile);
+// // router.get("/profile", protect, (req, res) => {
+// //   res.json({ user: req.user });
+// // });
+// // /api/auth/refresh
+// // router.post("/refresh", (req, res) => {
+// //   const refreshToken = req.cookies.refreshToken;
+// //   if (!refreshToken) {
+// //     return res.status(401).json({ message: "No refresh token" });
+// //   }
+
+// //   try {
+// //     const payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+
+// //     const newAccessToken = jwt.sign(
+// //       { userId: payload.userId },
+// //       process.env.ACCESS_SECRET,
+// //       { expiresIn: "1m" }
+// //     );
+
+// //     res.cookie("accessToken", newAccessToken, {
+// //       httpOnly: true,
+// //       secure: true,
+// //       sameSite: "none",
+// //       path: "/",
+// //       maxAge: 1 * 60 * 1000,
+// //     });
+
+// //     res.json({ success: true });
+// //   } catch {
+// //     return res.status(401).json({ message: "Invalid refresh token" });
+// //   }
+// // });
+// router.post("/refresh", (req, res) => {
+//   const refreshToken = req.cookies.refreshToken;
+
+//   if (!refreshToken) {
+//     return res.status(401).json({ message: "No refresh token" });
+//   }
+
+//   try {
+//     const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+//     const newAccessToken = jwt.sign(
+//       { userId: payload.userId },
+//       process.env.JWT_ACCESS_SECRET,
+//       { expiresIn: "1m" }
+//     );
+
+//     setAuthCookies(res, newAccessToken, refreshToken);
+
+//     res.json({ success: true });
+
+//   } catch {
+//     return res.status(401).json({ message: "Invalid refresh token" });
+//   }
+// });
+
+// export default router;
+
+
+import jwt from "jsonwebtoken";
+
 import express from "express";
 import * as auth from "../controllers/auth.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
@@ -45,6 +122,31 @@ router.get("/profile", protect, getProfile);
 //     return res.status(401).json({ message: "Invalid refresh token" });
 //   }
 // });
+// router.post("/refresh", (req, res) => {
+//   const refreshToken = req.cookies.refreshToken;
+
+//   if (!refreshToken) {
+//     return res.status(401).json({ message: "No refresh token" });
+//   }
+
+//   try {
+//     const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+//     const newAccessToken = jwt.sign(
+//       { userId: payload.userId },
+//       process.env.JWT_ACCESS_SECRET,
+//       { expiresIn: "1m" }
+//     );
+
+//     setAuthCookies(res, newAccessToken, refreshToken);
+
+//     res.json({ success: true });
+
+//   } catch {
+//     return res.status(401).json({ message: "Invalid refresh token" });
+//   }
+// });
+
 router.post("/refresh", (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
@@ -53,23 +155,26 @@ router.post("/refresh", (req, res) => {
   }
 
   try {
-    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const payload = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET
+    );
 
     const newAccessToken = jwt.sign(
-      { userId: payload.userId },
+      { id: payload.id },
       process.env.JWT_ACCESS_SECRET,
-      { expiresIn: "1m" }
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRE }
     );
 
     setAuthCookies(res, newAccessToken, refreshToken);
 
     res.json({ success: true });
 
-  } catch {
+  } catch (err) {
+    console.error("Refresh error:", err);
     return res.status(401).json({ message: "Invalid refresh token" });
   }
 });
-
 export default router;
 
 

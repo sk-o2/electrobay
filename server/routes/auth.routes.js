@@ -53,11 +53,11 @@ router.post("/refresh", (req, res) => {
   }
 
   try {
-    const payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
     const newAccessToken = jwt.sign(
       { userId: payload.userId },
-      process.env.ACCESS_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: "1m" }
     );
 

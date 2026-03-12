@@ -29,13 +29,14 @@ router.post("/refresh", (req, res) => {
     const newAccessToken = jwt.sign(
       { userId: payload.userId },
       process.env.ACCESS_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "1m" }
     );
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      path: "/",
       maxAge: 15 * 60 * 1000,
     });
 

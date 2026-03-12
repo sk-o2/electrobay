@@ -1,10 +1,10 @@
 // import axios from "axios";
 
-// api.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 // const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-// const api = api.create({
+// const api = axios.create({
 //   baseURL: API_BASE,
 //   withCredentials: true,
 //   headers: {
@@ -12,7 +12,7 @@
 //   },
 // });
 
-// api.interceptors.response.use(
+// axios.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
 //     const status = error.response?.status;
@@ -37,10 +37,10 @@
 // export default api;
 
 
-// src/utils/api.js
+// src/utils/axios.js
 import axios from "axios";
 
-const api = api.create({
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
   withCredentials: true,
   headers: {
@@ -48,7 +48,7 @@ const api = api.create({
   },
 });
 
-// api.interceptors.response.use(
+// axios.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
 //     const status = error.response?.status;
@@ -74,7 +74,7 @@ const processQueue = () => {
   queue = [];
 };
 
-api.interceptors.response.use(
+axios.interceptors.response.use(
   res => res,
   async err => {
     const originalRequest = err.config;
@@ -94,7 +94,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await api.post("/api/auth/refresh");
+        await axios.post("/api/auth/refresh");
         isRefreshing = false;
         processQueue();
         return api(originalRequest);

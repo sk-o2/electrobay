@@ -281,7 +281,7 @@
 //   // NOTE: use relative URLs + withCredentials so same-origin or proxy works
 //   const fetchUser = async () => {
 //     try {
-//       const res = await api.get("/api/profile", { withCredentials: true });
+//       const res = await axios.get("/api/profile", { withCredentials: true });
 //       const u = res.data?.user ?? res.data;
 //       setUser(u || {});
 //     } catch (err) {
@@ -297,7 +297,7 @@
 
 //   // const fetchOrders = async () => {
 //   //   try {
-//   //     const res = await api.get("/api/orders", { withCredentials: true });
+//   //     const res = await axios.get("/api/orders", { withCredentials: true });
 //   //     setOrders(res.data || []);
 //   //   } catch (err) {
 //   //     console.error("fetchOrders error:", err);
@@ -306,7 +306,7 @@
 //   // };
 //   const fetchOrders = async () => {
 //     try {
-//       const res = await api.get("/api/orders/my-orders", {
+//       const res = await axios.get("/api/orders/my-orders", {
 //         withCredentials: true,
 //       });
 //       setOrders(res.data); // 👈 backend returns array
@@ -317,7 +317,7 @@
 
 //   const handleUpdate = async () => {
 //     try {
-//       await api.put("/api/user/update", user, { withCredentials: true });
+//       await axios.put("/api/user/update", user, { withCredentials: true });
 //       setIsEditing(false);
 //       setSuccessMsg("Profile updated successfully!");
 //       await fetchUser();
@@ -331,7 +331,7 @@
 
 //   const handleLogout = async () => {
 //     try {
-//       await api.post("/api/auth/logout", {}, { withCredentials: true });
+//       await axios.post("/api/auth/logout", {}, { withCredentials: true });
 //     } catch (err) {
 //       console.warn("logout error:", err);
 //     } finally {
@@ -346,7 +346,7 @@
 //       return;
 //     }
 //     try {
-//       await api.delete("/api/user/delete", { withCredentials: true });
+//       await axios.delete("/api/user/delete", { withCredentials: true });
 //       setUser({});
 //       navigate("/");
 //     } catch (err) {
@@ -945,8 +945,8 @@ const ProfilePage = () => {
   // NOTE: use relative URLs + withCredentials so same-origin or proxy works
   const fetchUser = async () => {
     try {
-      // const res = await api.get("/api/profile", { withCredentials: true });
-      const res = await api.get("/api/profile");
+      // const res = await axios.get("/api/profile", { withCredentials: true });
+      const res = await axios.get("/api/profile");
       const u = res.data?.user ?? res.data;
       setUser(u || {});
     } catch (err) {
@@ -962,7 +962,7 @@ const ProfilePage = () => {
 
   // const fetchOrders = async () => {
   //   try {
-  //     const res = await api.get("/api/orders", { withCredentials: true });
+  //     const res = await axios.get("/api/orders", { withCredentials: true });
   //     setOrders(res.data || []);
   //   } catch (err) {
   //     console.error("fetchOrders error:", err);
@@ -971,10 +971,10 @@ const ProfilePage = () => {
   // };
   const fetchOrders = async () => {
     try {
-      // const res = await api.get("/api/orders/my-orders", {
+      // const res = await axios.get("/api/orders/my-orders", {
       //   withCredentials: true,
       // });
-      const res = await api.get("/api/orders/my-orders");
+      const res = await axios.get("/api/orders/my-orders");
       setOrders(res.data); // 👈 backend returns array
     } catch (err) {
       console.error("fetchOrders error:", err);
@@ -983,8 +983,8 @@ const ProfilePage = () => {
 
   const handleUpdate = async () => {
     try {
-      // await api.put("/api/user/update", user, { withCredentials: true });
-      await api.put("/api/user/update", user);
+      // await axios.put("/api/user/update", user, { withCredentials: true });
+      await axios.put("/api/user/update", user);
       setIsEditing(false);
       setSuccessMsg("Profile updated successfully!");
       await fetchUser();
@@ -998,8 +998,8 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     try {
-      // await api.post("/api/auth/logout", {}, { withCredentials: true });
-      await api.post("/api/auth/logout");
+      // await axios.post("/api/auth/logout", {}, { withCredentials: true });
+      await axios.post("/api/auth/logout");
     } catch (err) {
       console.warn("logout error:", err);
     } finally {
@@ -1014,8 +1014,8 @@ const ProfilePage = () => {
       return;
     }
     try {
-      // await api.delete("/api/user/delete", { withCredentials: true });
-      await api.delete("/api/user/delete");
+      // await axios.delete("/api/user/delete", { withCredentials: true });
+      await axios.delete("/api/user/delete");
       setUser({});
       navigate("/");
     } catch (err) {

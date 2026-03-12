@@ -2,13 +2,13 @@
 
 // // Create axios instance with base URL
 // const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-// const api = api.create({
+// const api = axios.create({
 //   baseURL: API_BASE,
 //   withCredentials: true
 // });
 
 // // Request interceptor - Add token to every request
-// api.interceptors.request.use(
+// axios.interceptors.request.use(
 //   (config) => {
 //     const token = localStorage.getItem('token');
 //     if (token) {
@@ -22,7 +22,7 @@
 // );
 
 // // Response interceptor - Handle 401 errors (unauthorized)
-// api.interceptors.response.use(
+// axios.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
 //     if (error.response?.status === 401) {

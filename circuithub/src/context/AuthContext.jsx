@@ -15,15 +15,15 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Axios default to include cookies for all requests
-  // api.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   const fetchCurrentUser = useCallback(async () => {
     setLoading(true);
     try {
       // Adjust base URL via VITE_API_URL if needed
       const base = import.meta.env.VITE_API_URL || "";
-      // const res = await api.get(`${base}/api/profile`);
-      const res = await api.get("/api/profile");
+      // const res = await axios.get(`${base}/api/profile`);
+      const res = await axios.get("/api/profile");
       setUser(res.data.user || null);
     } catch (err) {
       setUser(null);
@@ -38,12 +38,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async ({ email, password, remember = false }) => {
     const base = import.meta.env.VITE_API_URL || "";
-    // await api.post(
+    // await axios.post(
     //   `${base}/api/auth/login`,
     //   { email, password, remember },
     //   { withCredentials: true }
     // );
-    await api.post("/api/auth/login", { email, password, remember });
+    await axios.post("/api/auth/login", { email, password, remember });
     // populate user after login (server sets cookies)
     await fetchCurrentUser();
   };
@@ -51,8 +51,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     const base = import.meta.env.VITE_API_URL || "";
     try {
-      // await api.post(`${base}/api/auth/logout`, {}, { withCredentials: true });
-      await api.post("/api/auth/logout");
+      // await axios.post(`${base}/api/auth/logout`, {}, { withCredentials: true });
+      await axios.post("/api/auth/logout");
     } catch (err) {
       // ignore errors, still clear client state
     } finally {
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }) => {
 
 // // create a small axios instance so baseURL and withCredentials are centralized
 // const API_BASE = import.meta.env.VITE_API_URL || "";
-// const api = api.create({
+// const api = axios.create({
 //   baseURL: API_BASE,
 //   withCredentials: true, // ensures cookies are sent
 //   headers: { "Content-Type": "application/json" },
@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
 //   const fetchCurrentUser = useCallback(async () => {
 //     setLoading(true);
 //     try {
-//       const res = await api.get("/api/profile");
+//       const res = await axios.get("/api/profile");
 //       setUser(res.data?.user ?? null);
 //       return res.data?.user ?? null;
 //     } catch (err) {
@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }) => {
 //   // login: returns the user on success, throws on failure
 //   const login = async ({ email, password, remember = false } = {}) => {
 //     try {
-//       await api.post("/api/auth/login", { email, password, remember });
+//       await axios.post("/api/auth/login", { email, password, remember });
 //       const u = await fetchCurrentUser(); // repopulate user from server
 //       return u;
 //     } catch (err) {
@@ -167,7 +167,7 @@ export const AuthProvider = ({ children }) => {
 //   // logout: attempt server logout, then clear client user state
 //   const logout = async () => {
 //     try {
-//       await api.post("/api/auth/logout");
+//       await axios.post("/api/auth/logout");
 //     } catch (err) {
 //       // ignore server error but still clear client-side auth
 //       console.warn("Logout error (ignored):", err?.response?.data ?? err.message);

@@ -228,7 +228,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      const res = await api.post(
+      const res = await axios.post(
         `${API_BASE}/api/auth/reset-password/${token}`,
         {
           token,

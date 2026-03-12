@@ -29,7 +29,7 @@ const API = import.meta.env.VITE_API_URL;
       setLoading(true);
       try {
 
-        const res = await api.get(`${API}/api/products/${id}`);
+        const res = await axios.get(`${API}/api/products/${id}`);
         const prod = res.data?.product ?? res.data;
         // const prod = res.data?.data ?? res.data;
 
@@ -38,7 +38,7 @@ const API = import.meta.env.VITE_API_URL;
 
         if (user) {
           try {
-            const cartRes = await api.get(`${API}/api/cart`, { withCredentials: true });
+            const cartRes = await axios.get(`${API}/api/cart`, { withCredentials: true });
             setCartCount(cartRes.data.items?.length || 0);
           } catch (err) {
             console.debug("Cart fetch failed:", err?.message ?? err);
@@ -49,7 +49,7 @@ const API = import.meta.env.VITE_API_URL;
 
         const fetchSimilar = async () => {
           try {
-            const s = await api.get(`${API}/api/products/${id}/similar`);
+            const s = await axios.get(`${API}/api/products/${id}/similar`);
             const list = Array.isArray(s.data) ? s.data : s.data?.products ?? [];
             if (list.length) {
               setSimilar(list.slice(0, 12));
@@ -61,7 +61,7 @@ const API = import.meta.env.VITE_API_URL;
 
           try {
             if (prod?.brand) {
-              const byBrand = await api.get(
+              const byBrand = await axios.get(
                 `${API}/api/products?brand=${encodeURIComponent(prod.brand)}&limit=12`
               );
               const list = byBrand.data?.products ?? byBrand.data ?? [];
@@ -80,7 +80,7 @@ const API = import.meta.env.VITE_API_URL;
 
         const fetchRelated = async () => {
           try {
-            const r = await api.get(`${API}/api/products/${id}/related`);
+            const r = await axios.get(`${API}/api/products/${id}/related`);
             const list = Array.isArray(r.data) ? r.data : r.data?.products ?? [];
             if (list.length) {
               setRelated(list.slice(0, 12));
@@ -92,7 +92,7 @@ const API = import.meta.env.VITE_API_URL;
 
           try {
             if (prod?.category) {
-              const byCat = await api.get(
+              const byCat = await axios.get(
                 `${API}/api/products?category=${encodeURIComponent(prod.category)}&limit=12`
               );
               const list = byCat.data?.products ?? byCat.data ?? [];
@@ -107,7 +107,7 @@ const API = import.meta.env.VITE_API_URL;
           }
 
           try {
-            const allRes = await api.get(`${API}/api/products?limit=50`);
+            const allRes = await axios.get(`${API}/api/products?limit=50`);
             const list = allRes.data?.products ?? allRes.data ?? [];
             if (Array.isArray(list) && list.length) {
               const myPrice = Number(prod?.price || 0);
@@ -158,7 +158,7 @@ const API = import.meta.env.VITE_API_URL;
       return;
     }
     try {
-      await api.post(
+      await axios.post(
         `${API}/api/cart/add`,
         { productId: id, quantity: qty },
         { withCredentials: true }
@@ -191,7 +191,7 @@ const API = import.meta.env.VITE_API_URL;
       return;
     }
     try {
-      await api.post(
+      await axios.post(
         `${API}/api/products/${id}/reviews`,
         { comment: newReview },
         { withCredentials: true }
@@ -654,7 +654,7 @@ const API = import.meta.env.VITE_API_URL;
                         e.stopPropagation();
                         if (!user) navigate("/auth");
                         else {
-                          api.post("http://localhost:5000/api/cart/add", { productId: sId, quantity: 1 }, { withCredentials: true })
+                          axios.post("http://localhost:5000/api/cart/add", { productId: sId, quantity: 1 }, { withCredentials: true })
                             .then(() => setCartCount((c) => c + 1))
                             .catch((err) => console.debug("Similar add failed:", err?.message ?? err));
                         }
@@ -701,7 +701,7 @@ const API = import.meta.env.VITE_API_URL;
                         e.stopPropagation();
                         if (!user) navigate("/auth");
                         else {
-                          api.post(`${API}/api/cart/add`, { productId: rId, quantity: 1 }, { withCredentials: true })
+                          axios.post(`${API}/api/cart/add`, { productId: rId, quantity: 1 }, { withCredentials: true })
                             .then(() => setCartCount((c) => c + 1))
                             .catch((err) => console.debug("Related add failed:", err?.message ?? err));
                         }

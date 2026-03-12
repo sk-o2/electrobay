@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import ProductCard from "../components/ProductCard";
 import { useSearchParams } from "react-router-dom";
 import electro from "../assets/electro.png";
-api.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -51,7 +51,7 @@ const categoryFromURL = searchParams.get("category");
       if (search) params.append("search", search);
 
       const url = `/api/products${params.toString() ? `?${params.toString()}` : ""}`;
-      const res = await api.get(url, { headers: { "Cache-Control": "no-store" } });
+      const res = await axios.get(url, { headers: { "Cache-Control": "no-store" } });
       const payload = res.data?.data ?? res.data;
       setProducts(Array.isArray(payload) ? payload : []);
       setError(null);
@@ -89,7 +89,7 @@ useEffect(() => {
 
   const handleAddToCart = async (productId) => {
     try {
-      const res = await api.post("/api/cart/add", { productId, quantity: 1 });
+      const res = await axios.post("/api/cart/add", { productId, quantity: 1 });
       alert("Added to cart!");
     } catch (err) {
       console.error("handleAddToCart error:", err);

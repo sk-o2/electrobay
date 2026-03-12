@@ -20,7 +20,7 @@ export default function CartPage() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.get("/api/cart", { headers: { "Cache-Control": "no-store" } });
+      const res = await axios.get("/api/cart", { headers: { "Cache-Control": "no-store" } });
       const payload = res.data ?? {};
       const cart = payload.cart ?? { items: [] };
       setCartItems(Array.isArray(cart.items) ? cart.items : []);
@@ -46,7 +46,7 @@ export default function CartPage() {
   const handleUpdateQuantity = async (productId, quantity) => {
     if (quantity < 1) return;
     try {
-      await api.put("/api/cart/update", { productId, quantity });
+      await axios.put("/api/cart/update", { productId, quantity });
       await fetchCart();
     } catch (err) {
       console.error("Error updating quantity:", err, err?.response?.data);
@@ -63,7 +63,7 @@ export default function CartPage() {
   const handleRemove = async (productId) => {
     if (!window.confirm("Remove this item from cart?")) return;
     try {
-      await api.delete(`/api/cart/remove/${productId}`);
+      await axios.delete(`/api/cart/remove/${productId}`);
       await fetchCart();
     } catch (err) {
       console.error("Error removing item:", err, err?.response?.data);

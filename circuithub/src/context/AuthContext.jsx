@@ -3,8 +3,8 @@
 
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import axios from "axios";
-
+// import axios from "axios";
+import api from "../utils/api";
 const AuthContext = createContext(null);
 
 // Hook for consumers
@@ -15,14 +15,15 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Axios default to include cookies for all requests
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
 
   const fetchCurrentUser = useCallback(async () => {
     setLoading(true);
     try {
       // Adjust base URL via VITE_API_URL if needed
       const base = import.meta.env.VITE_API_URL || "";
-      const res = await axios.get(`${base}/api/profile`);
+      // const res = await axios.get(`${base}/api/profile`);
+      const res = await api.get("/api/profile");
       setUser(res.data.user || null);
     } catch (err) {
       setUser(null);
@@ -37,11 +38,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async ({ email, password, remember = false }) => {
     const base = import.meta.env.VITE_API_URL || "";
-    await axios.post(
-      `${base}/api/auth/login`,
-      { email, password, remember },
-      { withCredentials: true }
-    );
+    // await axios.post(
+    //   `${base}/api/auth/login`,
+    //   { email, password, remember },
+    //   { withCredentials: true }
+    // );
+    await api.post("/api/auth/login", { email, password, remember });
     // populate user after login (server sets cookies)
     await fetchCurrentUser();
   };
@@ -49,7 +51,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     const base = import.meta.env.VITE_API_URL || "";
     try {
-      await axios.post(`${base}/api/auth/logout`, {}, { withCredentials: true });
+      // await axios.post(`${base}/api/auth/logout`, {}, { withCredentials: true });
+      await api.post("/api/auth/logout");
     } catch (err) {
       // ignore errors, still clear client state
     } finally {

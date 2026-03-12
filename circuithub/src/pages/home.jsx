@@ -1474,7 +1474,7 @@ function HeroBanner() {
         }}
       >
         {/* <div className="absolute inset-0 bg-gradient-to-br from-blue-600/95 via-purple-600/90 to-slate-900/95" /> */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#03ca56] to-[#004472] " /> 
+        <div className="absolute inset-0 bg-gradient-to-br from-[#990574] to-[#02538a] " /> 
         <div className="absolute inset-0">
           <div className="absolute top-10 md:top-20 left-10 md:left-20 w-40 md:w-64 h-40 md:h-64 bg-blue-400/20 rounded-full blur-3xl animate-pulse" />
           <div

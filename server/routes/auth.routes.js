@@ -37,7 +37,7 @@ router.post("/refresh", (req, res) => {
       secure: true,
       sameSite: "none",
       path: "/",
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
 
     res.json({ success: true });

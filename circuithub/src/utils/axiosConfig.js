@@ -2,7 +2,7 @@
 
 // // Create axios instance with base URL
 // const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-// const api = axios.create({
+// const api = api.create({
 //   baseURL: API_BASE,
 //   withCredentials: true
 // });

@@ -265,9 +265,9 @@ function StatCard({ title, value, icon: Icon, color = "blue" }) {
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-axios.defaults.baseURL = API_BASE;
-axios.defaults.withCredentials = true; // critical for cookie-based auth
-axios.defaults.headers.common["Content-Type"] = "application/json";
+api.defaults.baseURL = API_BASE;
+api.defaults.withCredentials = true; // critical for cookie-based auth
+api.defaults.headers.common["Content-Type"] = "application/json";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -313,8 +313,8 @@ const AdminDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("/api/products");
-      // const { data } = await axios.get("/api/products");
+      const res = await api.get("/api/products");
+      // const { data } = await api.get("/api/products");
       const parsed = parseProductsResponse(res.data ?? res);
       setProducts(parsed);
     } catch (err) {
@@ -325,7 +325,7 @@ const AdminDashboard = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("/api/orders");
+      const res = await api.get("/api/orders");
       const parsed = parseOrdersResponse(res.data ?? res);
       setOrders(parsed);
     } catch (err) {
@@ -337,7 +337,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        await axios.get("/api/admin/check");
+        await api.get("/api/admin/check");
         fetchProducts();
         fetchOrders();
       } catch (err) {
@@ -378,7 +378,7 @@ const AdminDashboard = () => {
               .filter(Boolean),
       };
 
-      await axios.post("/api/products", payload);
+      await api.post("/api/products", payload);
       await fetchProducts();
       setNewProduct({
         name: "",
@@ -400,7 +400,7 @@ const AdminDashboard = () => {
   const deleteProduct = async (id) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`/api/products/${id}`);
+      await api.delete(`/api/products/${id}`);
       await fetchProducts();
     } catch (err) {
       console.error("deleteProduct error:", err);
@@ -410,7 +410,7 @@ const AdminDashboard = () => {
 
   const updateProductStock = async (id, stock) => {
     try {
-      await axios.put(`/api/products/${id}`, { stock });
+      await api.put(`/api/products/${id}`, { stock });
       await fetchProducts();
     } catch (err) {
       console.error("updateProductStock error:", err);
@@ -420,7 +420,7 @@ const AdminDashboard = () => {
 
   const updateOrderStatus = async (orderId, status) => {
     try {
-      await axios.put(`/api/orders/${orderId}`, { status });
+      await api.put(`/api/orders/${orderId}`, { status });
       await fetchOrders();
     } catch (err) {
       console.error("updateOrderStatus error:", err);
@@ -434,7 +434,7 @@ const AdminDashboard = () => {
   // };
   const handleLogout = async () => {
     try {
-      await axios.post("/api/auth/logout"); // clears cookies on server
+      await api.post("/api/auth/logout"); // clears cookies on server
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
@@ -456,7 +456,7 @@ const AdminDashboard = () => {
 
   const updateProduct = async (id) => {
   try {
-    await axios.put(`/api/products/${id}`, editData);
+    await api.put(`/api/products/${id}`, editData);
     setEditingProductId(null);
     setEditData({});
     fetchProducts();

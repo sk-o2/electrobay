@@ -37,7 +37,7 @@ export default function VerifyEmail() {
       (async () => {
         try {
           setState({ loading: true, success: false, message: "Verifying..." });
-          const res = await axios.post("/api/auth/verify-email", { token, uid }, { withCredentials: true });
+          const res = await api.post("/api/auth/verify-email", { token, uid }, { withCredentials: true });
           if (res.data?.success) {
             setState({ loading: false, success: true, message: "Verified! Redirecting to login..." });
             setTimeout(() => navigate("/auth"), 1600);

@@ -208,7 +208,7 @@ export default function ForgotPassword() {
     }
 
     try {
-      const res = await axios.post(
+      const res = await api.post(
         `${API_BASE}/api/auth/forgot-password`,
         { email },
         { withCredentials: true }

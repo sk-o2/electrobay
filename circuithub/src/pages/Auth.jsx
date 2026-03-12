@@ -7,7 +7,7 @@ import { ShoppingCart, User, Menu, Mail, Lock, Phone, MapPin, CheckCircle, Alert
 import electro from "../assets/electro.png";
 
 // ensure cookies are sent for all requests
-axios.defaults.withCredentials = true;
+api.defaults.withCredentials = true;
 
 const API_BASE = import.meta.env.VITE_API_URL || "";
 
@@ -203,7 +203,7 @@ export default function Auth({ onAuthSuccess = () => {} }) {
       await login({ email: loginEmail, password: loginPassword, remember });
       setSuccessMsg("Logged in successfully — redirecting...");
       try {
-        const me = await axios.get(`${API_BASE}/api/profile`, { withCredentials: true });
+        const me = await api.get(`${API_BASE}/api/profile`, { withCredentials: true });
         onAuthSuccess(me.data?.user || null);
       } catch (_) {}
       setTimeout(() => navigate("/products"), 500);
@@ -240,7 +240,7 @@ export default function Auth({ onAuthSuccess = () => {} }) {
         postalCode: suAddress.postalCode,
         country: suAddress.country,
       };
-      await axios.post(
+      await api.post(
         `${API_BASE}/api/auth/register`,
         {
           name: suName,

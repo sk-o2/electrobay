@@ -48,7 +48,7 @@ const CheckoutPage = () => {
 
     const fetchCartItems = async () => {
       try {
-        const res = await axios.get("/api/cart");
+        const res = await api.get("/api/cart");
         setCartItems(res.data.cart?.items || []);
       } catch (error) {
         console.error("Failed to load cart items", error);
@@ -96,7 +96,7 @@ const CheckoutPage = () => {
 
   //   try {
   //     setProcessingOrder(true);
-  //     const res = await axios.post("/api/orders", {
+  //     const res = await api.post("/api/orders", {
   //       items: cartItems,
   //       address: deliveryAddress,
   //     });
@@ -124,7 +124,7 @@ const CheckoutPage = () => {
     try {
       setProcessingOrder(true);
 
-      const res = await axios.post("/api/orders", {
+      const res = await api.post("/api/orders", {
         items: cartItems,
         address, // 👈 always an object
       });

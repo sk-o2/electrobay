@@ -946,7 +946,7 @@ const ProfilePage = () => {
   const fetchUser = async () => {
     try {
       // const res = await axios.get("/api/profile", { withCredentials: true });
-      const res = await axios.get("/api/profile");
+      const res = await api.get("/api/profile");
       const u = res.data?.user ?? res.data;
       setUser(u || {});
     } catch (err) {
@@ -974,7 +974,7 @@ const ProfilePage = () => {
       // const res = await axios.get("/api/orders/my-orders", {
       //   withCredentials: true,
       // });
-      const res = await axios.get("/api/orders/my-orders");
+      const res = await api.get("/api/orders/my-orders");
       setOrders(res.data); // 👈 backend returns array
     } catch (err) {
       console.error("fetchOrders error:", err);
@@ -984,7 +984,7 @@ const ProfilePage = () => {
   const handleUpdate = async () => {
     try {
       // await axios.put("/api/user/update", user, { withCredentials: true });
-      await axios.put("/api/user/update", user);
+      await api.put("/api/user/update", user);
       setIsEditing(false);
       setSuccessMsg("Profile updated successfully!");
       await fetchUser();
@@ -999,7 +999,7 @@ const ProfilePage = () => {
   const handleLogout = async () => {
     try {
       // await axios.post("/api/auth/logout", {}, { withCredentials: true });
-      await axios.post("/api/auth/logout");
+      await api.post("/api/auth/logout");
     } catch (err) {
       console.warn("logout error:", err);
     } finally {
@@ -1015,7 +1015,7 @@ const ProfilePage = () => {
     }
     try {
       // await axios.delete("/api/user/delete", { withCredentials: true });
-      await axios.delete("/api/user/delete");
+      await api.delete("/api/user/delete");
       setUser({});
       navigate("/");
     } catch (err) {

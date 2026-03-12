@@ -12,7 +12,7 @@
 //   },
 // });
 
-// axios.interceptors.response.use(
+// api.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
 //     const status = error.response?.status;
@@ -37,7 +37,7 @@
 // export default api;
 
 
-// src/utils/axios.js
+// src/utils/api.js
 import axios from "axios";
 
 const api = axios.create({
@@ -48,7 +48,7 @@ const api = axios.create({
   },
 });
 
-// axios.interceptors.response.use(
+// api.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
 //     const status = error.response?.status;
@@ -74,7 +74,7 @@ const processQueue = () => {
   queue = [];
 };
 
-axios.interceptors.response.use(
+api.interceptors.response.use(
   res => res,
   async err => {
     const originalRequest = err.config;
@@ -94,7 +94,7 @@ axios.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axios.post("/api/auth/refresh");
+        await api.post("/api/auth/refresh");
         isRefreshing = false;
         processQueue();
         return api(originalRequest);

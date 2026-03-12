@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
       // Adjust base URL via VITE_API_URL if needed
       const base = import.meta.env.VITE_API_URL || "";
       // const res = await axios.get(`${base}/api/profile`);
-      const res = await axios.get("/api/profile");
+      const res = await api.get("/api/profile");
       setUser(res.data.user || null);
     } catch (err) {
       setUser(null);
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     //   { email, password, remember },
     //   { withCredentials: true }
     // );
-    await axios.post("/api/auth/login", { email, password, remember });
+    await api.post("/api/auth/login", { email, password, remember });
     // populate user after login (server sets cookies)
     await fetchCurrentUser();
   };
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     const base = import.meta.env.VITE_API_URL || "";
     try {
       // await axios.post(`${base}/api/auth/logout`, {}, { withCredentials: true });
-      await axios.post("/api/auth/logout");
+      await api.post("/api/auth/logout");
     } catch (err) {
       // ignore errors, still clear client state
     } finally {
@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
 //   const fetchCurrentUser = useCallback(async () => {
 //     setLoading(true);
 //     try {
-//       const res = await axios.get("/api/profile");
+//       const res = await api.get("/api/profile");
 //       setUser(res.data?.user ?? null);
 //       return res.data?.user ?? null;
 //     } catch (err) {
@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }) => {
 //   // login: returns the user on success, throws on failure
 //   const login = async ({ email, password, remember = false } = {}) => {
 //     try {
-//       await axios.post("/api/auth/login", { email, password, remember });
+//       await api.post("/api/auth/login", { email, password, remember });
 //       const u = await fetchCurrentUser(); // repopulate user from server
 //       return u;
 //     } catch (err) {
@@ -167,7 +167,7 @@ export const AuthProvider = ({ children }) => {
 //   // logout: attempt server logout, then clear client user state
 //   const logout = async () => {
 //     try {
-//       await axios.post("/api/auth/logout");
+//       await api.post("/api/auth/logout");
 //     } catch (err) {
 //       // ignore server error but still clear client-side auth
 //       console.warn("Logout error (ignored):", err?.response?.data ?? err.message);

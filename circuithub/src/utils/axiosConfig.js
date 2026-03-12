@@ -8,7 +8,7 @@
 // });
 
 // // Request interceptor - Add token to every request
-// axios.interceptors.request.use(
+// api.interceptors.request.use(
 //   (config) => {
 //     const token = localStorage.getItem('token');
 //     if (token) {
@@ -22,7 +22,7 @@
 // );
 
 // // Response interceptor - Handle 401 errors (unauthorized)
-// axios.interceptors.response.use(
+// api.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
 //     if (error.response?.status === 401) {

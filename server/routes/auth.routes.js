@@ -2,7 +2,7 @@ import express from "express";
 import * as auth from "../controllers/auth.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { getProfile } from "../controllers/user.controller.js";
-
+import { setAuthCookies } from "../utils/token.js";
 const router = express.Router();
 
 router.post("/logout", protect, auth.logout);
@@ -17,8 +17,37 @@ router.get("/profile", protect, getProfile);
 //   res.json({ user: req.user });
 // });
 // /api/auth/refresh
+// router.post("/refresh", (req, res) => {
+//   const refreshToken = req.cookies.refreshToken;
+//   if (!refreshToken) {
+//     return res.status(401).json({ message: "No refresh token" });
+//   }
+
+//   try {
+//     const payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+
+//     const newAccessToken = jwt.sign(
+//       { userId: payload.userId },
+//       process.env.ACCESS_SECRET,
+//       { expiresIn: "1m" }
+//     );
+
+//     res.cookie("accessToken", newAccessToken, {
+//       httpOnly: true,
+//       secure: true,
+//       sameSite: "none",
+//       path: "/",
+//       maxAge: 1 * 60 * 1000,
+//     });
+
+//     res.json({ success: true });
+//   } catch {
+//     return res.status(401).json({ message: "Invalid refresh token" });
+//   }
+// });
 router.post("/refresh", (req, res) => {
   const refreshToken = req.cookies.refreshToken;
+
   if (!refreshToken) {
     return res.status(401).json({ message: "No refresh token" });
   }
@@ -32,20 +61,14 @@ router.post("/refresh", (req, res) => {
       { expiresIn: "1m" }
     );
 
-    res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      path: "/",
-      maxAge: 1 * 60 * 1000,
-    });
+    setAuthCookies(res, newAccessToken, refreshToken);
 
     res.json({ success: true });
+
   } catch {
     return res.status(401).json({ message: "Invalid refresh token" });
   }
 });
-
 
 export default router;
 
